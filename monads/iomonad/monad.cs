@@ -323,7 +323,8 @@ public abstract class IO<A>
     ///     and the result is returned. If the current IO instance is in a failure state, the function
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned.
-    public B Fold<B>(Func<Exception, B> failureHandler, Func<A, B> successHandler)
+    /// </returns>
+    public B fold<B>(Func<Exception, B> failureHandler, Func<A, B> successHandler)
     {
         return IsSuccess() ? successHandler(GetA()) : failureHandler(GetException());
     }
@@ -348,10 +349,64 @@ public abstract class IO<A>
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned as a Task.
     /// </returns>
-    public async Task<B> FoldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
+    public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
     {
         return IsSuccess()
             ? await successHandler(GetA())
+            : await failureHandler(GetException());
+    }
+
+    /// <summary>
+    ///     Applies a function to the encapsulated value of the current IO instance based on its success or failure state.
+    ///     The function is asynchronous and returns a new B instance containing the result.
+    /// </summary>
+    /// <typeparam name="B">The type of the result of the function.</typeparam>
+    /// <param name="failureHandler">
+    ///     A function that takes the exception encapsulated in the current IO instance in case of failure, and returns a new
+    ///     value of type B.
+    /// </param>
+    /// <param name="successHandler">
+    ///     A function that takes the encapsulated value of the current IO instance in case of success, and returns a new Task
+    ///     containing a value of type B.
+    /// </param>
+    /// <returns>
+    ///     If the current IO instance is in a success state, the function <paramref name="successHandler" /> is applied to the
+    ///     encapsulated value,
+    ///     and the result is returned as a Task. If the current IO instance is in a failure state, the function
+    ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
+    ///     and the result is returned.
+    /// </returns>
+    public async Task<B> foldAsync<B>(Func<Exception, B> failureHandler, Func<A, Task<B>> successHandler)
+    {
+        return IsSuccess()
+            ? await successHandler(GetA())
+            : failureHandler(GetException());
+    }
+
+    /// <summary>
+    ///     Applies a function to the encapsulated value of the current IO instance based on its success or failure state.
+    ///     The function is asynchronous and returns a new B instance containing the result.
+    /// </summary>
+    /// <typeparam name="B">The type of the result of the function.</typeparam>
+    /// <param name="failureHandler">
+    ///     A function that takes the exception encapsulated in the current IO instance in case of failure, and returns a new
+    ///     Task containing a value of type B.
+    /// </param>
+    /// <param name="successHandler">
+    ///     A function that takes the encapsulated value of the current IO instance in case of success, and returns a new value
+    ///     of type B.
+    /// </param>
+    /// <returns>
+    ///     If the current IO instance is in a success state, the function <paramref name="successHandler" /> is applied to the
+    ///     encapsulated value,
+    ///     and the result is returned as a Task. If the current IO instance is in a failure state, the function
+    ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
+    ///     and the result is returned as a Task.
+    /// </returns>
+    public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, B> successHandler)
+    {
+        return IsSuccess()
+            ? successHandler(GetA())
             : await failureHandler(GetException());
     }
 

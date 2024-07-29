@@ -31,7 +31,7 @@ public static class ioextension
     public static async Task<IO<B>> flatMapAsync<A, B>(
         this Task<IO<A>> ioTask,
         Func<A, Task<IO<B>>> asyncFlatMapper
-    )
+    ) where B : A
     {
         var currentTask = await ioTask;
         return await currentTask.flatMapAsync(asyncFlatMapper);
@@ -151,8 +151,68 @@ public static class ioextension
         Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
     {
         var currentTask = await ioTask;
-        return await currentTask.FoldAsync(failureHandler, successHandler);
+        return await currentTask.foldAsync(failureHandler, successHandler);
     }
+
+    /// <summary>
+    ///     Asynchronously folds the result of an IO monad into a new value using sync-async functions.
+    ///     The first function is used when the IO monad contains a failure, and the second function is used when it contains a
+    ///     success.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <typeparam name="B">The type of the new value to be produced.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="failureHandler">
+    ///     A function that takes an Exception and returns a B.
+    ///     This function is called when the IO monad contains a failure.
+    /// </param>
+    /// <param name="successHandler">
+    ///     An asynchronous function that takes an A and returns a Task of B.
+    ///     This function is called when the IO monad contains a success.
+    /// </param>
+    /// <returns>
+    ///     An asynchronous task containing the new value produced by either the failureHandler or the successHandler,
+    ///     depending on the result of the input IO monad.
+    /// </returns>
+    public static async Task<B> foldAsync<A, B>(
+        this Task<IO<A>> ioTask,
+        Func<Exception, B> failureHandler, Func<A, Task<B>> successHandler)
+    {
+        var currentTask = await ioTask;
+        return await currentTask.foldAsync(failureHandler, successHandler);
+    }
+
+    /// <summary>
+    ///     Asynchronously folds the result of an IO monad into a new value using sync-async functions.
+    ///     The first function is used when the IO monad contains a failure, and the second function is used when it contains a
+    ///     success.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <typeparam name="B">The type of the new value to be produced.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="failureHandler">
+    ///     A function that takes an Exception and returns a B.
+    ///     This function is called when the IO monad contains a failure.
+    /// </param>
+    /// <param name="successHandler">
+    ///     A synchronous function that takes an A and returns a B.
+    ///     This function is called when the IO monad contains a success.
+    /// </param>
+    /// <returns>
+    ///     An asynchronous task containing the new value produced by either the failureHandler or the successHandler,
+    ///     depending on the result of the input IO monad.
+    /// </returns>
+    public static async Task<B> foldAsync<A, B>(
+        this Task<IO<A>> ioTask,
+        Func<Exception, Task<B>> failureHandler, Func<A, B> successHandler)
+    {
+        var currentTask = await ioTask;
+        return await currentTask.foldAsync(failureHandler, successHandler);
+    }
+
+    // public static async Task<A> FoldAsync<A>(
+    //     this Task<IO<A>> ioTask,
+    //     Func<Exception, >)
 
     /// <summary>
     ///     Asynchronously recovers from a failure in an IO monad by applying a recovery function.

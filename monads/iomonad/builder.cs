@@ -36,7 +36,6 @@ public static class io
         }
     }
 
-
     /// <summary>
     ///     Asynchronously creates an instance of <see cref="IO{A}" /> by invoking the provided function and wrapping the
     ///     result in a
