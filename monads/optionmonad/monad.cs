@@ -422,6 +422,6 @@ public abstract class Option<A>
     /// </returns>
     public async Task<A> getOrElseAsync(A a)
     {
-        return IsSome() ? GetA() : a;
+        return IsSome() ? GetA() : await Task.FromResult(a);
     }
 }
