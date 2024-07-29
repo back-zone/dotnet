@@ -12,6 +12,12 @@ public abstract class IO<A>
 {
     protected abstract bool IsSuccess();
 
+    /// <summary>
+    ///     Determines whether the current instance represents a failure state.
+    /// </summary>
+    /// <returns>
+    ///     <c>true</c> if the current instance is in a failure state; otherwise, <c>false</c>.
+    /// </returns>
     private bool IsFailure()
     {
         return !IsSuccess();
