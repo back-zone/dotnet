@@ -30,6 +30,19 @@ public static class option
         return await io.ofAsync(builder).asOptionAsync();
     }
 
+    public static async Task<Option<A>> ofAsync<A>(Task<Option<A>> builder)
+    {
+        try
+        {
+            var product = await builder;
+            return product;
+        }
+        catch (Exception _)
+        {
+            return none<A>();
+        }
+    }
+
     /// <summary>
     ///     Creates an Option instance containing a specified value.
     /// </summary>

@@ -1,4 +1,3 @@
-using monads.iomonad.subtypes;
 using monads.result;
 
 namespace monads.iomonad;
@@ -47,7 +46,7 @@ public abstract class IO<A>
     /// </returns>
     public IO<B> flatMap<B>(Func<A, IO<B>> flatMapper)
     {
-        if (IsFailure()) return Failure<B>.Of(GetException());
+        if (IsFailure()) return io.fail<B>(GetException());
         try
         {
             var result = flatMapper(GetA());
