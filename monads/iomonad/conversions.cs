@@ -11,7 +11,10 @@ public static class conversions
     /// <typeparam name="A">The type of the value contained in the IO monad.</typeparam>
     /// <param name="io">The IO monad to convert.</param>
     /// <returns>An Option monad containing the value from the IO monad if successful, or None if an error occurred.</returns>
-    public static Option<A> toOption<A>(this IO<A> io)
+    public static Option<A> toOption<A>(
+        this IO<A> io
+    )
+        where A : notnull
     {
         return io.fold(_ => option.none<A>(), option.some);
     }
@@ -25,10 +28,12 @@ public static class conversions
     ///     An asynchronous Option monad containing the value from the IO monad if successful, or None if an error occurred.
     ///     The result is awaitable, allowing for asynchronous execution.
     /// </returns>
-    public static async Task<Option<A>> toOptionAsync<A>(this Task<IO<A>> ioTask)
+    public static async Task<Option<A>> toOptionAsync<A>(
+        this Task<IO<A>> ioTask
+    )
+        where A : notnull
     {
         var currentTask = await ioTask;
-
         return currentTask.toOption();
     }
 
@@ -42,7 +47,10 @@ public static class conversions
     ///     an error occurred.
     ///     The Right side of the Either monad contains the value, while the Left side contains the exception.
     /// </returns>
-    public static Either<Exception, R> toEither<R>(this IO<R> io)
+    public static Either<Exception, R> toEither<R>(
+        this IO<R> io
+    )
+        where R : notnull
     {
         return io.fold(
             either.left<Exception, R>,
@@ -62,10 +70,12 @@ public static class conversions
     ///     exception.
     ///     The result is awaitable, allowing for asynchronous execution.
     /// </returns>
-    public static async Task<Either<Exception, R>> toEitherAsync<R>(this Task<IO<R>> ioTask)
+    public static async Task<Either<Exception, R>> toEitherAsync<R>(
+        this Task<IO<R>> ioTask
+    )
+        where R : notnull
     {
         var currentTask = await ioTask;
-
         return currentTask.toEither();
     }
 }

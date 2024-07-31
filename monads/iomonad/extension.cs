@@ -2,7 +2,7 @@ using monads.iomonad;
 
 namespace monads.result;
 
-public static class ioextension
+public static class ioextensions
 {
     /// <summary>
     ///     Asynchronously maps the inner value of an IO monad to a new value using an asynchronous mapper function.

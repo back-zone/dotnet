@@ -1,5 +1,6 @@
 using monads.iomonad;
 using monads.iomonad.subtypes;
+using Xunit.Abstractions;
 
 namespace monads.tests.iotests;
 
@@ -15,8 +16,10 @@ internal class Cat : Animal
 {
 }
 
-public class CoreFunctionalityTests
+public class CoreFunctionalityTests(ITestOutputHelper testOutputHelper)
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
     [Fact]
     public void Should_succeed_with_42()
     {

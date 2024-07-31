@@ -50,7 +50,10 @@ public abstract class IO<A> where A : notnull
     ///     A new IO instance containing the result of applying the function to the encapsulated value of the current instance.
     ///     If the current instance is in a failure state, the function is not applied and the current instance is returned.
     /// </returns>
-    public IO<B> flatMap<B>(Func<A, IO<B>> flatMapper)
+    public IO<B> flatMap<B>(
+        Func<A, IO<B>> flatMapper
+    )
+        where B : notnull
     {
         if (IsFailure()) return io.fail<B>(GetException());
         try
@@ -78,7 +81,10 @@ public abstract class IO<A> where A : notnull
     ///     current instance.
     ///     If the current instance is in a failure state, the function is not applied and the current instance is returned.
     /// </returns>
-    public async Task<IO<B>> flatMapAsync<B>(Func<A, Task<IO<B>>> asyncFlatMapper)
+    public async Task<IO<B>> flatMapAsync<B>(
+        Func<A, Task<IO<B>>> asyncFlatMapper
+    )
+        where B : notnull
     {
         return IsSuccess()
             ? await io.ofAsync(asyncFlatMapper(GetA()))
@@ -97,7 +103,10 @@ public abstract class IO<A> where A : notnull
     ///     A new IO instance containing the result of applying the function to the encapsulated value of the current instance.
     ///     If the current instance is in a failure state, the function is not applied and the current instance is returned.
     /// </returns>
-    public IO<B> map<B>(Func<A, B> mapper)
+    public IO<B> map<B>(
+        Func<A, B> mapper
+    )
+        where B : notnull
     {
         return IsSuccess()
             ? flatMap(a => io.succeed(mapper(a)))
@@ -118,7 +127,10 @@ public abstract class IO<A> where A : notnull
     ///     current instance.
     ///     If the current instance is in a failure state, the function is not applied and the current instance is returned.
     /// </returns>
-    public async Task<IO<B>> mapAsync<B>(Func<A, Task<B>> asyncMapper)
+    public async Task<IO<B>> mapAsync<B>(
+        Func<A, Task<B>> asyncMapper
+    )
+        where B : notnull
     {
         return IsSuccess()
             ? await flatMapAsync(a => io.ofAsync(asyncMapper(a)))
@@ -132,7 +144,10 @@ public abstract class IO<A> where A : notnull
     /// <typeparam name="B">The type of the value to be encapsulated in the new IO instance.</typeparam>
     /// <param name="b">The value to be encapsulated in the new IO instance.</param>
     /// <returns>A new IO instance containing the specified value.</returns>
-    public IO<B> asThis<B>(B b)
+    public IO<B> asThis<B>(
+        B b
+    )
+        where B : notnull
     {
         return map(_ => b);
     }
@@ -144,7 +159,10 @@ public abstract class IO<A> where A : notnull
     /// <typeparam name="B">The type of the value to be encapsulated in the new IO instance.</typeparam>
     /// <param name="b">A Task containing the value to be encapsulated in the new IO instance.</param>
     /// <returns>A new IO instance containing the specified value wrapped in a Task.</returns>
-    public async Task<IO<B>> asThisAsync<B>(Task<B> b)
+    public async Task<IO<B>> asThisAsync<B>(
+        Task<B> b
+    )
+        where B : notnull
     {
         return await mapAsync(_ => b);
     }
@@ -170,7 +188,12 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public IO<C> zipWith<B, C>(IO<B> other, Func<A, B, C> zipper)
+    public IO<C> zipWith<B, C>(
+        IO<B> other,
+        Func<A, B, C> zipper
+    )
+        where B : notnull
+        where C : notnull
     {
         return flatMap(a => other.map(b => zipper(a, b)));
     }
@@ -196,7 +219,12 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public async Task<IO<C>> zipWithAsync<B, C>(Task<IO<B>> otherAsync, Func<A, B, Task<C>> zipper)
+    public async Task<IO<C>> zipWithAsync<B, C>(
+        Task<IO<B>> otherAsync,
+        Func<A, B, Task<C>> zipper
+    )
+        where B : notnull
+        where C : notnull
     {
         return await flatMapAsync(a => otherAsync.mapAsync(b => zipper(a, b)));
     }
@@ -214,7 +242,10 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public IO<B> zipRight<B>(IO<B> other)
+    public IO<B> zipRight<B>(
+        IO<B> other
+    )
+        where B : notnull
     {
         return zipWith(other, (_, b) => b);
     }
@@ -232,7 +263,10 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public async Task<IO<B>> zipRightAsync<B>(Task<IO<B>> otherAsync)
+    public async Task<IO<B>> zipRightAsync<B>(
+        Task<IO<B>> otherAsync
+    )
+        where B : notnull
     {
         return await zipWithAsync(otherAsync, (_, b) => Task.FromResult(b));
     }
@@ -249,7 +283,10 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public IO<(A, B)> zip<B>(IO<B> other)
+    public IO<(A, B)> zip<B>(
+        IO<B> other
+    )
+        where B : notnull
     {
         return zipWith(other, (a, b) => (a, b));
     }
@@ -266,7 +303,10 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public async Task<IO<(A, B)>> zipAsync<B>(Task<IO<B>> otherAsync)
+    public async Task<IO<(A, B)>> zipAsync<B>(
+        Task<IO<B>> otherAsync
+    )
+        where B : notnull
     {
         return await zipWithAsync(otherAsync, (a, b) => Task.FromResult((a, b)));
     }
@@ -284,7 +324,10 @@ public abstract class IO<A> where A : notnull
     ///     If either of the current or other IO instances is in a failure state, the function is not applied and the current
     ///     instance is returned.
     /// </returns>
-    public IO<B> andThen<B>(IO<B> other)
+    public IO<B> andThen<B>(
+        IO<B> other
+    )
+        where B : notnull
     {
         return zipRight(other);
     }
@@ -305,7 +348,10 @@ public abstract class IO<A> where A : notnull
     ///     instance is returned.
     ///     The returned IO instance is asynchronous.
     /// </returns>
-    public async Task<IO<B>> andThenAsync<B>(Task<IO<B>> otherAsync)
+    public async Task<IO<B>> andThenAsync<B>(
+        Task<IO<B>> otherAsync
+    )
+        where B : notnull
     {
         return await zipRightAsync(otherAsync);
     }
@@ -329,7 +375,11 @@ public abstract class IO<A> where A : notnull
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned.
     /// </returns>
-    public B fold<B>(Func<Exception, B> failureHandler, Func<A, B> successHandler)
+    public B fold<B>(
+        Func<Exception, B> failureHandler,
+        Func<A, B> successHandler
+    )
+        where B : notnull
     {
         try
         {
@@ -361,7 +411,11 @@ public abstract class IO<A> where A : notnull
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned as a Task.
     /// </returns>
-    public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
+    public async Task<B> foldAsync<B>(
+        Func<Exception, Task<B>> failureHandler,
+        Func<A, Task<B>> successHandler
+    )
+        where B : notnull
     {
         try
         {
@@ -395,7 +449,11 @@ public abstract class IO<A> where A : notnull
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned.
     /// </returns>
-    public async Task<B> foldAsync<B>(Func<Exception, B> failureHandler, Func<A, Task<B>> successHandler)
+    public async Task<B> foldAsync<B>(
+        Func<Exception, B> failureHandler,
+        Func<A, Task<B>> successHandler
+    )
+        where B : notnull
     {
         try
         {
@@ -429,7 +487,11 @@ public abstract class IO<A> where A : notnull
     ///     <paramref name="failureHandler" /> is applied to the encapsulated exception,
     ///     and the result is returned as a Task.
     /// </returns>
-    public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, B> successHandler)
+    public async Task<B> foldAsync<B>(
+        Func<Exception, Task<B>> failureHandler,
+        Func<A, B> successHandler
+    )
+        where B : notnull
     {
         try
         {
@@ -489,7 +551,10 @@ public abstract class IO<A> where A : notnull
     ///     A new IO instance with the encapsulated value of the current instance if it is in a success state,
     ///     or the encapsulated value of the 'other' IO instance if the current instance is in a failure state.
     /// </returns>
-    public IO<U> orElse<U>(IO<U> other) where U : A
+    public IO<U> orElse<U>(
+        IO<U> other
+    )
+        where U : A
     {
         return IsSuccess() ? io.succeed((U)GetA()) : other;
     }
@@ -509,7 +574,10 @@ public abstract class IO<A> where A : notnull
     ///     or the encapsulated value of the 'other' IO instance if the current instance is in a failure state.
     ///     The returned IO instance is asynchronous.
     /// </returns>
-    public async Task<IO<U>> orElseAsync<U>(Task<IO<U>> otherAsync) where U : A
+    public async Task<IO<U>> orElseAsync<U>(
+        Task<IO<U>> otherAsync
+    )
+        where U : A
     {
         return IsSuccess()
             ? io.succeed((U)GetA())
@@ -528,7 +596,10 @@ public abstract class IO<A> where A : notnull
     ///     The encapsulated value of the current instance if it is in a success state, or the provided default value if the
     ///     current instance is in a failure state.
     /// </returns>
-    public U getOrElse<U>(U u) where U : A
+    public U getOrElse<U>(
+        U u
+    )
+        where U : A
     {
         return IsSuccess() ? (U)GetA() : u;
     }
@@ -601,7 +672,10 @@ public abstract class IO<A> where A : notnull
     ///     A new IO instance with the encapsulated value transformed by the provided transformer function.
     ///     If the current IO instance is in a failure state, the returned IO instance will also be in a failure state.
     /// </returns>
-    public IO<U> transform<U>(Func<A, IO<U>> transformer)
+    public IO<U> transform<U>(
+        Func<A, IO<U>> transformer
+    )
+        where U : A
     {
         return flatMap(transformer);
     }
@@ -622,7 +696,10 @@ public abstract class IO<A> where A : notnull
     ///     A new IO instance with the encapsulated value transformed by the provided transformer function.
     ///     If the current IO instance is in a failure state, the returned IO instance will also be in a failure state.
     /// </returns>
-    public async Task<IO<U>> transformAsync<U>(Func<A, Task<IO<U>>> transformerAsync)
+    public async Task<IO<U>> transformAsync<U>(
+        Func<A, Task<IO<U>>> transformerAsync
+    )
+        where U : A
     {
         return await flatMapAsync(transformerAsync);
     }
