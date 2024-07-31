@@ -4,7 +4,7 @@ namespace monads.iomonad.subtypes;
 ///     Represents a successful computation in the IO monad.
 /// </summary>
 /// <typeparam name="A">The type of the result.</typeparam>
-public sealed class Success<A> : IO<A>
+public sealed class Success<A> : IO<A> where A : notnull
 {
     private readonly A _a;
 

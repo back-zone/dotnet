@@ -13,7 +13,7 @@ public static class option
     /// <returns>An Option instance containing the result of the builder function, or None if the function throws an exception.</returns>
     public static Option<A> of<A>(Func<A> builder)
     {
-        return io.of(builder).asOption();
+        return io.of(builder).toOption();
     }
 
     /// <summary>
@@ -27,7 +27,7 @@ public static class option
     /// </returns>
     public static async Task<Option<A>> ofAsync<A>(Task<A> builder)
     {
-        return await io.ofAsync(builder).asOptionAsync();
+        return await io.ofAsync(builder).toOptionAsync();
     }
 
     public static async Task<Option<A>> ofAsync<A>(Task<Option<A>> builder)

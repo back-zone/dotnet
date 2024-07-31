@@ -238,4 +238,94 @@ public static class ioextension
         var currentTask = await ioTask;
         return await currentTask.recoverAsync(recoverAsync);
     }
+
+    /// <summary>
+    ///     Asynchronously attempts to retrieve the value from the input IO monad.
+    ///     If the input IO monad contains a failure, it returns the result of the otherAsync task.
+    ///     If the input IO monad contains a success, it returns the same IO monad.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <typeparam name="U">The type of the inner value of the otherAsync task.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="otherAsync">The asynchronous task containing the IO monad to be returned in case of failure.</param>
+    /// <returns>
+    ///     An asynchronous task containing the result of either the input IO monad or the otherAsync task,
+    ///     depending on the result of the input IO monad.
+    /// </returns>
+    public static async Task<IO<U>> orElseAsync<A, U>(
+        this Task<IO<A>> ioTask,
+        Task<IO<U>> otherAsync) where U : A
+    {
+        var currentTask = await ioTask;
+        return await currentTask.orElseAsync(otherAsync);
+    }
+
+    /// <summary>
+    ///     Asynchronously retrieves the value from the input IO monad.
+    ///     If the input IO monad contains a failure, it returns the specified default value.
+    ///     If the input IO monad contains a success, it returns the same IO monad.
+    /// </summary>
+    /// <typeparam name="U">The type of the inner value of the input IO monad and the default value.</typeparam>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="u">The default value to be returned in case of failure.</param>
+    /// <returns>
+    ///     An asynchronous task containing the inner value of the input IO monad if it contains a success.
+    ///     If the input IO monad contains a failure, it returns the specified default value.
+    /// </returns>
+    public static async Task<U> getOrElse<U, A>(this Task<IO<A>> ioTask, U u) where U : A
+    {
+        var currentTask = await ioTask;
+        return currentTask.getOrElse(u);
+    }
+
+    /// <summary>
+    ///     Asynchronously filters the inner value of an IO monad using an asynchronous predicate function.
+    ///     If the predicate function returns true for the inner value, the IO monad is returned as is.
+    ///     If the predicate function returns false for the inner value, a new IO monad containing a failure is returned.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="predicateAsync">
+    ///     The asynchronous predicate function that takes an A and returns a Task of bool.
+    ///     This function is used to filter the inner value of the IO monad.
+    /// </param>
+    /// <returns>
+    ///     An asynchronous task containing the filtered IO monad.
+    ///     If the predicate function returns true for the inner value, the returned IO monad will be the same as the input IO
+    ///     monad.
+    ///     If the predicate function returns false for the inner value, a new IO monad containing a failure will be returned.
+    /// </returns>
+    public static async Task<IO<A>> filterAsync<A>(
+        this Task<IO<A>> ioTask,
+        Func<A, Task<bool>> predicateAsync)
+    {
+        var currentTask = await ioTask;
+        return await currentTask.filterAsync(predicateAsync);
+    }
+
+    /// <summary>
+    ///     Asynchronously transforms the inner value of an IO monad using an asynchronous transformer function.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <typeparam name="U">The type of the inner value of the returned IO monad.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="transformerAsync">
+    ///     The asynchronous transformer function that takes an A and returns a Task of IO of U.
+    ///     This function is used to transform the inner value of the IO monad.
+    /// </param>
+    /// <returns>
+    ///     An asynchronous task containing the transformed IO monad.
+    ///     If the transformer function returns a new IO monad for the inner value, the returned IO monad will contain the
+    ///     transformed value.
+    ///     If the transformer function does not return a new IO monad, the returned IO monad will be the same as the input IO
+    ///     monad.
+    /// </returns>
+    public static async Task<IO<U>> transformAsync<A, U>(
+        this Task<IO<A>> ioTask,
+        Func<A, Task<IO<U>>> transformerAsync)
+    {
+        var currentTask = await ioTask;
+        return await currentTask.transformAsync(transformerAsync);
+    }
 }

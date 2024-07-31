@@ -8,7 +8,7 @@ namespace monads.iomonad;
 ///     This class supports operations like mapping, zipping, recovering from failures, and applying functions to the
 ///     encapsulated value.
 /// </summary>
-public abstract class IO<A>
+public abstract class IO<A> where A : notnull
 {
     protected abstract bool IsSuccess();
 
@@ -331,7 +331,14 @@ public abstract class IO<A>
     /// </returns>
     public B fold<B>(Func<Exception, B> failureHandler, Func<A, B> successHandler)
     {
-        return IsSuccess() ? successHandler(GetA()) : failureHandler(GetException());
+        try
+        {
+            return IsSuccess() ? successHandler(GetA()) : failureHandler(GetException());
+        }
+        catch (Exception e)
+        {
+            return failureHandler(e);
+        }
     }
 
     /// <summary>
@@ -356,9 +363,16 @@ public abstract class IO<A>
     /// </returns>
     public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
     {
-        return IsSuccess()
-            ? await successHandler(GetA())
-            : await failureHandler(GetException());
+        try
+        {
+            return IsSuccess()
+                ? await successHandler(GetA())
+                : await failureHandler(GetException());
+        }
+        catch (Exception e)
+        {
+            return await failureHandler(e);
+        }
     }
 
     /// <summary>
@@ -383,9 +397,16 @@ public abstract class IO<A>
     /// </returns>
     public async Task<B> foldAsync<B>(Func<Exception, B> failureHandler, Func<A, Task<B>> successHandler)
     {
-        return IsSuccess()
-            ? await successHandler(GetA())
-            : failureHandler(GetException());
+        try
+        {
+            return IsSuccess()
+                ? await successHandler(GetA())
+                : failureHandler(GetException());
+        }
+        catch (Exception e)
+        {
+            return failureHandler(e);
+        }
     }
 
     /// <summary>
@@ -410,9 +431,16 @@ public abstract class IO<A>
     /// </returns>
     public async Task<B> foldAsync<B>(Func<Exception, Task<B>> failureHandler, Func<A, B> successHandler)
     {
-        return IsSuccess()
-            ? successHandler(GetA())
-            : await failureHandler(GetException());
+        try
+        {
+            return IsSuccess()
+                ? successHandler(GetA())
+                : await failureHandler(GetException());
+        }
+        catch (Exception e)
+        {
+            return await failureHandler(e);
+        }
     }
 
     /// <summary>
@@ -448,5 +476,154 @@ public abstract class IO<A>
         return IsFailure()
             ? await io.ofAsync(recoverAsync(GetException()))
             : this;
+    }
+
+    /// <summary>
+    ///     Returns a new IO instance with the encapsulated value of the current instance if it is in a success state.
+    ///     If the current instance is in a failure state, the encapsulated value of the 'other' IO instance is returned
+    ///     instead.
+    /// </summary>
+    /// <typeparam name="U">The type of the encapsulated value in the 'other' IO instance.</typeparam>
+    /// <param name="other">The IO instance to return if the current instance is in a failure state.</param>
+    /// <returns>
+    ///     A new IO instance with the encapsulated value of the current instance if it is in a success state,
+    ///     or the encapsulated value of the 'other' IO instance if the current instance is in a failure state.
+    /// </returns>
+    public IO<U> orElse<U>(IO<U> other) where U : A
+    {
+        return IsSuccess() ? io.succeed((U)GetA()) : other;
+    }
+
+    /// <summary>
+    ///     Returns a new IO instance with the encapsulated value of the current instance if it is in a success state.
+    ///     If the current instance is in a failure state, the encapsulated value of the 'other' IO instance is returned
+    ///     instead.
+    /// </summary>
+    /// <typeparam name="U">
+    ///     The type of the encapsulated value in the 'other' IO instance. It must be a subtype of the current
+    ///     instance's encapsulated value type.
+    /// </typeparam>
+    /// <param name="otherAsync">A Task containing the IO instance to return if the current instance is in a failure state.</param>
+    /// <returns>
+    ///     A new IO instance with the encapsulated value of the current instance if it is in a success state,
+    ///     or the encapsulated value of the 'other' IO instance if the current instance is in a failure state.
+    ///     The returned IO instance is asynchronous.
+    /// </returns>
+    public async Task<IO<U>> orElseAsync<U>(Task<IO<U>> otherAsync) where U : A
+    {
+        return IsSuccess()
+            ? io.succeed((U)GetA())
+            : await otherAsync;
+    }
+
+    /// <summary>
+    ///     Retrieves the encapsulated value of the current IO instance if it is in a success state.
+    ///     If the current instance is in a failure state, the provided default value is returned instead.
+    /// </summary>
+    /// <typeparam name="U">
+    ///     The type of the default value. It must be a subtype of the current instance's encapsulated value type.
+    /// </typeparam>
+    /// <param name="u">The default value to return if the current instance is in a failure state.</param>
+    /// <returns>
+    ///     The encapsulated value of the current instance if it is in a success state, or the provided default value if the
+    ///     current instance is in a failure state.
+    /// </returns>
+    public U getOrElse<U>(U u) where U : A
+    {
+        return IsSuccess() ? (U)GetA() : u;
+    }
+
+    /// <summary>
+    ///     Applies a predicate function to the encapsulated value of the current IO instance.
+    ///     If the predicate returns true and the current instance is in a success state, the original IO instance is returned.
+    ///     If the predicate returns false or the current instance is in a failure state, a new IO instance is returned with an
+    ///     InvalidOperationException.
+    /// </summary>
+    /// <param name="predicate">
+    ///     A function that takes the encapsulated value and returns a boolean indicating whether the value
+    ///     satisfies the condition.
+    /// </param>
+    /// <returns>
+    ///     If the predicate returns true and the current instance is in a success state, the original IO instance is returned.
+    ///     If the predicate returns false or the current instance is in a failure state, a new IO instance is returned with an
+    ///     InvalidOperationException.
+    /// </returns>
+    public IO<A> filter(Func<A, bool> predicate)
+    {
+        try
+        {
+            if (IsSuccess() && predicate(GetA())) return this;
+            return io.fail<A>(new InvalidOperationException("Filter predicate failed"));
+        }
+        catch (Exception e)
+        {
+            return io.fail<A>(e);
+        }
+    }
+
+    /// <summary>
+    ///     Applies a predicate function to the encapsulated value of the current IO instance.
+    ///     If the predicate returns true and the current instance is in a success state, the original IO instance is returned.
+    ///     If the predicate returns false or the current instance is in a failure state, a new IO instance is returned with an
+    ///     InvalidOperationException.
+    /// </summary>
+    /// <param name="predicateAsync">
+    ///     A function that takes the encapsulated value and returns a Task containing a boolean indicating whether the value
+    ///     satisfies the condition. This function should be asynchronous.
+    /// </param>
+    /// <returns>
+    ///     If the predicate returns true and the current instance is in a success state, the original IO instance is returned.
+    ///     If the predicate returns false or the current instance is in a failure state, a new IO instance is returned with an
+    ///     InvalidOperationException.
+    /// </returns>
+    public async Task<IO<A>> filterAsync(Func<A, Task<bool>> predicateAsync)
+    {
+        try
+        {
+            if (IsSuccess() && await predicateAsync(GetA())) return this;
+            return io.fail<A>(new InvalidOperationException("Filter predicate failed"));
+        }
+        catch (Exception e)
+        {
+            return io.fail<A>(e);
+        }
+    }
+
+    /// <summary>
+    ///     Transforms the encapsulated value of the current IO instance using the provided transformer function.
+    /// </summary>
+    /// <typeparam name="U">The type of the encapsulated value in the returned IO instance.</typeparam>
+    /// <param name="transformer">
+    ///     A function that takes the encapsulated value of the current IO instance and returns a new IO instance containing
+    ///     the transformed value.
+    /// </param>
+    /// <returns>
+    ///     A new IO instance with the encapsulated value transformed by the provided transformer function.
+    ///     If the current IO instance is in a failure state, the returned IO instance will also be in a failure state.
+    /// </returns>
+    public IO<U> transform<U>(Func<A, IO<U>> transformer)
+    {
+        return flatMap(transformer);
+    }
+
+    /// <summary>
+    ///     Transforms the encapsulated value of the current IO instance using the provided transformer function.
+    ///     The transformer function takes the encapsulated value of the current IO instance and returns a new IO instance
+    ///     containing the transformed value.
+    ///     If the current IO instance is in a failure state, the returned IO instance will also be in a failure state.
+    /// </summary>
+    /// <typeparam name="U">The type of the encapsulated value in the returned IO instance.</typeparam>
+    /// <param name="transformerAsync">
+    ///     A function that takes the encapsulated value of the current IO instance and returns a new Task containing an IO
+    ///     instance containing the transformed value.
+    ///     This function should be asynchronous.
+    /// </param>
+    /// <returns>
+    ///     A new IO instance with the encapsulated value transformed by the provided transformer function.
+    ///     If the current IO instance is in a failure state, the returned IO instance will also be in a failure state.
+    /// </returns>
+    public async Task<IO<U>> transformAsync<U>(Func<A, Task<IO<U>>> transformerAsync)
+    {
+        return await flatMapAsync(transformerAsync);
     }
 }

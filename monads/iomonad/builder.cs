@@ -104,7 +104,7 @@ public static class io
     /// <returns>
     ///     A successful <see cref="IO{A}" /> instance containing the provided value.
     /// </returns>
-    public static IO<A> succeed<A>(A a)
+    public static IO<A> succeed<A>(A a) where A : notnull
     {
         return Success<A>.Of(a);
     }
@@ -117,7 +117,7 @@ public static class io
     /// <returns>
     ///     A failed <see cref="IO{A}" /> instance containing the provided exception.
     /// </returns>
-    public static IO<A> fail<A>(Exception exception)
+    public static IO<A> fail<A>(Exception exception) where A : notnull
     {
         return Failure<A>.Of(exception);
     }
@@ -130,7 +130,7 @@ public static class io
     /// <returns>
     ///     A failed <see cref="IO{A}" /> instance containing the provided message.
     /// </returns>
-    public static IO<A> fail<A>(string message)
+    public static IO<A> fail<A>(string message) where A : notnull
     {
         return Failure<A>.Of(message);
     }

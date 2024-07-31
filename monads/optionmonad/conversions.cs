@@ -14,7 +14,7 @@ public static class conversions
     ///     If the Option is Some, the IO will contain the value.
     ///     If the Option is None, the IO will fail with the message "Option is None".
     /// </returns>
-    public static IO<A> asIO<A>(this Option<A> option)
+    public static IO<A> toIO<A>(this Option<A> option)
     {
         return option.fold(
             io.fail<A>("Option is None"),
@@ -33,11 +33,10 @@ public static class conversions
     ///     If the Option is None, the IO will fail with the message "Option is None".
     ///     The conversion is performed asynchronously.
     /// </returns>
-    public static async Task<IO<A>> asIOAsync<A>(this Task<Option<A>> optionTask)
+    public static async Task<IO<A>> toIOAsync<A>(this Task<Option<A>> optionTask)
     {
-        return await optionTask.foldAsync(
-            io.fail<A>("Option is None"),
-            async a => await Task.FromResult(io.succeed(a))
-        );
+        var currentOption = await optionTask;
+
+        return currentOption.toIO();
     }
 }

@@ -4,7 +4,7 @@ namespace monads.iomonad.subtypes;
 ///     Represents a failed computation in the IO monad.
 /// </summary>
 /// <typeparam name="A">The type of the result.</typeparam>
-public sealed class Failure<A> : IO<A>
+public sealed class Failure<A> : IO<A> where A : notnull
 {
     private readonly Exception _exception;
 
