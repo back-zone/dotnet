@@ -4,7 +4,7 @@ namespace monads.optionmonad.subtypes;
 ///     Represents a subtype of Option that represents a lack of a value.
 /// </summary>
 /// <typeparam name="A">The type of the value that this Option may contain.</typeparam>
-public sealed class None<A> : Option<A>
+public sealed class None<A> : Option<A> where A : notnull
 {
     /// <summary>
     ///     Initializes a new instance of the <see cref="None{A}" /> class.

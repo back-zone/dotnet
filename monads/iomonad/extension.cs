@@ -14,7 +14,10 @@ public static class ioextension
     /// <returns>An asynchronous task containing the new IO monad with the mapped value.</returns>
     public static async Task<IO<B>> mapAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Func<A, Task<B>> asyncMapper)
+        Func<A, Task<B>> asyncMapper
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.mapAsync(asyncMapper);
@@ -31,7 +34,9 @@ public static class ioextension
     public static async Task<IO<B>> flatMapAsync<A, B>(
         this Task<IO<A>> ioTask,
         Func<A, Task<IO<B>>> asyncFlatMapper
-    ) where B : A
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.flatMapAsync(asyncFlatMapper);
@@ -43,15 +48,17 @@ public static class ioextension
     /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
     /// <typeparam name="B">The type of the new value to be produced.</typeparam>
     /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
-    /// <param name="asyncMapper">The asynchronous mapper function that takes an A and returns a Task of B.</param>
+    /// <param name="bTask">The asynchronous mapper function that takes an A and returns a Task of B.</param>
     /// <returns>An asynchronous task containing the new IO monad with the mapped value.</returns>
     public static async Task<IO<B>> asThisAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Task<B> value
+        Task<B> bTask
     )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
-        return await currentTask.asThisAsync(value);
+        return await currentTask.asThisAsync(bTask);
     }
 
     /// <summary>
@@ -63,11 +70,16 @@ public static class ioextension
     /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
     /// <typeparam name="B">The type of the new value to be produced.</typeparam>
     /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
-    /// <param name="asyncMapper">The asynchronous mapper function that takes an A and returns a Task of B.</param>
+    /// <param name="otherAsync">The asynchronous mapper function that takes an A and returns a Task of B.</param>
+    /// <param name="zipper">The asynchronous zip function that takes an A and B and returns a Task of C.</param>
     /// <returns>An asynchronous task containing the new IO monad with the mapped value.</returns>
     public static async Task<IO<C>> zipWithAsync<A, B, C>(
         this Task<IO<A>> ioTask,
-        Task<IO<B>> otherAsync, Func<A, B, Task<C>> zipper)
+        Task<IO<B>> otherAsync, Func<A, B, Task<C>> zipper
+    )
+        where A : notnull
+        where B : notnull
+        where C : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.zipWithAsync(otherAsync, zipper);
@@ -84,7 +96,10 @@ public static class ioextension
     /// <returns>An asynchronous task containing a new IO monad with the inner value of the second IO monad.</returns>
     public static async Task<IO<B>> zipRightAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Task<IO<B>> otherAsync)
+        Task<IO<B>> otherAsync
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.zipRightAsync(otherAsync);
@@ -102,7 +117,10 @@ public static class ioextension
     /// </returns>
     public static async Task<IO<(A, B)>> zipAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Task<IO<B>> otherAsync)
+        Task<IO<B>> otherAsync
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.zipAsync(otherAsync);
@@ -120,7 +138,10 @@ public static class ioextension
     /// <returns>An asynchronous task containing the result of the second IO monad.</returns>
     public static async Task<IO<B>> andThenAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Task<IO<B>> otherAsync)
+        Task<IO<B>> otherAsync
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.andThenAsync(otherAsync);
@@ -148,7 +169,11 @@ public static class ioextension
     /// </returns>
     public static async Task<B> FoldAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Func<Exception, Task<B>> failureHandler, Func<A, Task<B>> successHandler)
+        Func<Exception, Task<B>> failureHandler,
+        Func<A, Task<B>> successHandler
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.foldAsync(failureHandler, successHandler);
@@ -176,7 +201,11 @@ public static class ioextension
     /// </returns>
     public static async Task<B> foldAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Func<Exception, B> failureHandler, Func<A, Task<B>> successHandler)
+        Func<Exception, B> failureHandler,
+        Func<A, Task<B>> successHandler
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.foldAsync(failureHandler, successHandler);
@@ -204,7 +233,11 @@ public static class ioextension
     /// </returns>
     public static async Task<B> foldAsync<A, B>(
         this Task<IO<A>> ioTask,
-        Func<Exception, Task<B>> failureHandler, Func<A, B> successHandler)
+        Func<Exception, Task<B>> failureHandler,
+        Func<A, B> successHandler
+    )
+        where A : notnull
+        where B : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.foldAsync(failureHandler, successHandler);
@@ -233,7 +266,9 @@ public static class ioextension
     /// </returns>
     public static async Task<IO<A>> recoverAsync<A>(
         this Task<IO<A>> ioTask,
-        Func<Exception, Task<A>> recoverAsync)
+        Func<Exception, Task<A>> recoverAsync
+    )
+        where A : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.recoverAsync(recoverAsync);
@@ -254,7 +289,10 @@ public static class ioextension
     /// </returns>
     public static async Task<IO<U>> orElseAsync<A, U>(
         this Task<IO<A>> ioTask,
-        Task<IO<U>> otherAsync) where U : A
+        Task<IO<U>> otherAsync
+    )
+        where A : notnull
+        where U : A
     {
         var currentTask = await ioTask;
         return await currentTask.orElseAsync(otherAsync);
@@ -273,7 +311,12 @@ public static class ioextension
     ///     An asynchronous task containing the inner value of the input IO monad if it contains a success.
     ///     If the input IO monad contains a failure, it returns the specified default value.
     /// </returns>
-    public static async Task<U> getOrElse<U, A>(this Task<IO<A>> ioTask, U u) where U : A
+    public static async Task<U> getOrElse<U, A>(
+        this Task<IO<A>> ioTask,
+        U u
+    )
+        where A : notnull
+        where U : A
     {
         var currentTask = await ioTask;
         return currentTask.getOrElse(u);
@@ -298,7 +341,9 @@ public static class ioextension
     /// </returns>
     public static async Task<IO<A>> filterAsync<A>(
         this Task<IO<A>> ioTask,
-        Func<A, Task<bool>> predicateAsync)
+        Func<A, Task<bool>> predicateAsync
+    )
+        where A : notnull
     {
         var currentTask = await ioTask;
         return await currentTask.filterAsync(predicateAsync);
@@ -323,7 +368,10 @@ public static class ioextension
     /// </returns>
     public static async Task<IO<U>> transformAsync<A, U>(
         this Task<IO<A>> ioTask,
-        Func<A, Task<IO<U>>> transformerAsync)
+        Func<A, Task<IO<U>>> transformerAsync
+    )
+        where A : notnull
+        where U : A
     {
         var currentTask = await ioTask;
         return await currentTask.transformAsync(transformerAsync);

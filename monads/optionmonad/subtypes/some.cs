@@ -4,7 +4,7 @@ namespace monads.optionmonad.subtypes;
 ///     Represents a non-empty option, containing a value of type <typeparamref name="A" />.
 /// </summary>
 /// <typeparam name="A">The type of the value contained in the option.</typeparam>
-public sealed class Some<A> : Option<A>
+public sealed class Some<A> : Option<A> where A : notnull
 {
     private readonly A _a;
 

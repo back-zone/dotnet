@@ -4,7 +4,7 @@ namespace monads.optionmonad;
 ///     Represents an optional value. It can either hold a value of type <typeparamref name="A" /> or be empty.
 /// </summary>
 /// <typeparam name="A">The type of the optional value.</typeparam>
-public abstract class Option<A>
+public abstract class Option<A> where A : notnull
 {
     /// <summary>
     ///     Determines whether this instance holds a value.
@@ -38,7 +38,10 @@ public abstract class Option<A>
     ///     If the Option is Some, the result of applying the function to the value.
     ///     If the Option is None, or if the function throws an exception, returns None.
     /// </returns>
-    public Option<B> flatMap<B>(Func<A, Option<B>> flatMapper)
+    public Option<B> flatMap<B>(
+        Func<A, Option<B>> flatMapper
+    )
+        where B : notnull
     {
         if (IsNone()) return option.none<B>();
 
@@ -47,7 +50,7 @@ public abstract class Option<A>
             var result = flatMapper(GetA());
             return result;
         }
-        catch (Exception _)
+        catch (Exception)
         {
             return option.none<B>();
         }
@@ -66,7 +69,10 @@ public abstract class Option<A>
     ///     If the Option is Some, the result of applying the function to the value.
     ///     If the Option is None, or if the function throws an exception, returns None.
     /// </returns>
-    public async Task<Option<B>> flatMapAsync<B>(Func<A, Task<Option<B>>> asyncFlatMapper)
+    public async Task<Option<B>> flatMapAsync<B>(
+        Func<A, Task<Option<B>>> asyncFlatMapper
+    )
+        where B : notnull
     {
         return IsSome()
             ? await option.ofAsync(asyncFlatMapper(GetA()))
@@ -82,7 +88,10 @@ public abstract class Option<A>
     ///     If the Option is Some, the result of applying the function to the value.
     ///     If the Option is None, returns None.
     /// </returns>
-    public Option<B> map<B>(Func<A, B> mapper)
+    public Option<B> map<B>(
+        Func<A, B> mapper
+    )
+        where B : notnull
     {
         return IsSome()
             ? flatMap(a => option.some(mapper(a)))
@@ -102,7 +111,10 @@ public abstract class Option<A>
     ///     If the Option is Some, the result of applying the function to the value.
     ///     If the Option is None, or if the function throws an exception, returns None.
     /// </returns>
-    public async Task<Option<B>> mapAsync<B>(Func<A, Task<B>> asyncMapper)
+    public async Task<Option<B>> mapAsync<B>(
+        Func<A, Task<B>> asyncMapper
+    )
+        where B : notnull
     {
         return IsSome()
             ? await flatMapAsync(a => option.ofAsync(asyncMapper(a)))
@@ -116,7 +128,10 @@ public abstract class Option<A>
     /// <typeparam name="B">The type of the new Option.</typeparam>
     /// <param name="b">The value to be held in the new Option.</param>
     /// <returns>A new Option of type <typeparamref name="B" /> with the value <paramref name="b" />.</returns>
-    public Option<B> asThis<B>(B b)
+    public Option<B> asThis<B>(
+        B b
+    )
+        where B : notnull
     {
         return map(_ => b);
     }
@@ -136,7 +151,10 @@ public abstract class Option<A>
     ///     If the current Option is Some, the new Option will also be Some, holding the value awaited from the provided Task.
     ///     If the current Option is None, the new Option will also be None.
     /// </returns>
-    public async Task<Option<B>> asThisAsync<B>(Task<B> b)
+    public async Task<Option<B>> asThisAsync<B>(
+        Task<B> b
+    )
+        where B : notnull
     {
         return await mapAsync(_ => b);
     }
@@ -158,7 +176,12 @@ public abstract class Option<A>
     ///     the zipper function.
     ///     If either the current Option or the other Option is None, the result is None.
     /// </returns>
-    public Option<C> zipWith<B, C>(Option<B> other, Func<A, B, C> zipper)
+    public Option<C> zipWith<B, C>(
+        Option<B> other,
+        Func<A, B, C> zipper
+    )
+        where B : notnull
+        where C : notnull
     {
         return flatMap(a => other.map(b => zipper(a, b)));
     }
@@ -184,7 +207,12 @@ public abstract class Option<A>
     ///     the asynchronous zipper function.
     ///     If either the current Option or the other Option is None, the result is None.
     /// </returns>
-    public async Task<Option<C>> zipWithAsync<B, C>(Option<B> other, Func<A, B, Task<C>> asyncZipper)
+    public async Task<Option<C>> zipWithAsync<B, C>(
+        Option<B> other,
+        Func<A, B, Task<C>> asyncZipper
+    )
+        where B : notnull
+        where C : notnull
     {
         return await flatMapAsync(a => other.mapAsync(b => asyncZipper(a, b)));
     }
@@ -201,7 +229,10 @@ public abstract class Option<A>
     ///     If the other Option is Some, the result is Some with the value from the other Option.
     ///     If the current Option is None, the result is None.
     /// </returns>
-    public Option<B> zipRight<B>(Option<B> other)
+    public Option<B> zipRight<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return zipWith(other, (_, b) => b);
     }
@@ -217,7 +248,10 @@ public abstract class Option<A>
     ///     If the other Option is Some, the result is Some with the value from the other Option.
     ///     If the current Option is None, the result is None.
     /// </returns>
-    public async Task<Option<B>> zipRightAsync<B>(Option<B> other)
+    public async Task<Option<B>> zipRightAsync<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return await zipWithAsync(other, (_, b) => Task.FromResult(b));
     }
@@ -233,7 +267,10 @@ public abstract class Option<A>
     ///     If both the current Option and the other Option are Some, the result is Some with a tuple containing their values.
     ///     If either the current Option or the other Option is None, the result is None.
     /// </returns>
-    public Option<(A, B)> zip<B>(Option<B> other)
+    public Option<(A, B)> zip<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return zipWith(other, (a, b) => (a, b));
     }
@@ -249,7 +286,10 @@ public abstract class Option<A>
     ///     If both the current Option and the other Option are Some, the result is Some with a tuple containing their values.
     ///     If either the current Option or the other Option is None, the result is None.
     /// </returns>
-    public async Task<Option<(A, B)>> zipAsync<B>(Option<B> other)
+    public async Task<Option<(A, B)>> zipAsync<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return await zipWithAsync(other, (a, b) => Task.FromResult((a, b)));
     }
@@ -265,7 +305,10 @@ public abstract class Option<A>
     ///     If the other Option is Some, the result is Some with the value from the other Option.
     ///     If the current Option is None, the result is None.
     /// </returns>
-    public Option<B> andThen<B>(Option<B> other)
+    public Option<B> andThen<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return zipRight(other);
     }
@@ -283,7 +326,10 @@ public abstract class Option<A>
     ///     If the current Option is None, the result is None.
     ///     The result is represented as a Task.
     /// </returns>
-    public async Task<Option<B>> andThenAsync<B>(Option<B> other)
+    public async Task<Option<B>> andThenAsync<B>(
+        Option<B> other
+    )
+        where B : notnull
     {
         return await zipRightAsync(other);
     }
@@ -371,57 +417,167 @@ public abstract class Option<A>
     }
 
     /// <summary>
-    ///     Returns the current Option if it contains a value, otherwise returns a new Option with the provided value.
+    ///     Returns the current Option if it is Some, otherwise returns the provided <paramref name="other" /> Option.
     /// </summary>
-    /// <param name="a">The value to be returned if the current Option is None.</param>
+    /// <typeparam name="U">
+    ///     The type of the value in the returned Option. It must be a subtype or equal to the type of the
+    ///     value in the current Option.
+    /// </typeparam>
+    /// <param name="other">The Option to return if the current Option is None.</param>
     /// <returns>
-    ///     A new Option of type A.
-    ///     If the current Option is Some, the result is the current Option.
-    ///     If the current Option is None, the result is a new Some Option with the provided value.
+    ///     A new Option of type <typeparamref name="U" /> with the same value as the current Option if it is Some,
+    ///     otherwise a new Option of type <typeparamref name="U" /> with the same value as the provided
+    ///     <paramref name="other" /> Option.
     /// </returns>
-    public Option<A> orElse(A a)
+    public Option<U> orElse<U>(
+        Option<U> other
+    )
+        where U : A
     {
-        return IsSome() ? this : option.some(a);
+        return IsSome() ? option.some((U)GetA()) : other;
     }
 
     /// <summary>
-    ///     Returns the current Option if it contains a value, otherwise returns a new Option with the provided value.
-    ///     This method is asynchronous and returns a Task that represents the result.
+    ///     Returns the current Option if it is Some, otherwise returns the provided <paramref name="otherAsync" /> Option.
     /// </summary>
-    /// <param name="a">The value to be returned if the current Option is None.</param>
+    /// <typeparam name="U">
+    ///     The type of the value in the returned Option. It must be a subtype or equal to the type of the value in the current
+    ///     Option.
+    /// </typeparam>
+    /// <param name="otherAsync">
+    ///     A Task that will produce the Option to return if the current Option is None. This Task should not throw any
+    ///     exceptions.
+    /// </param>
     /// <returns>
-    ///     A new Option of type A.
-    ///     If the current Option is Some, the result is the current Option.
-    ///     If the current Option is None, the result is a new Some Option with the provided value.
+    ///     A new Option of type <typeparamref name="U" /> with the same value as the current Option if it is Some,
+    ///     otherwise a new Option of type <typeparamref name="U" /> with the same value as the provided
+    ///     <paramref name="otherAsync" /> Option.
+    ///     The result is represented as a Task.
     /// </returns>
-    public async Task<Option<A>> orElseAsync(A a)
+    public async Task<Option<U>> orElseAsync<U>(
+        Task<Option<U>> otherAsync
+    )
+        where U : A
     {
-        return IsSome() ? this : option.some(a);
+        return IsSome()
+            ? option.some((U)GetA())
+            : await otherAsync;
     }
 
     /// <summary>
-    ///     Retrieves the value held by the current Option. If the Option is None, the provided default value is returned.
+    ///     Retrieves the value held by the current Option if it is Some.
+    ///     If the current Option is None, the provided default value <paramref name="u" /> is returned.
     /// </summary>
-    /// <param name="a">The default value to be returned if the current Option is None.</param>
+    /// <typeparam name="U">
+    ///     The type of the value to be returned. It must be a subtype or equal to the type of the value in the current Option.
+    /// </typeparam>
+    /// <param name="u">
+    ///     The default value to be returned if the current Option is None.
+    /// </param>
     /// <returns>
-    ///     The value held by the current Option if it is Some, otherwise the provided default value <paramref name="a" />.
+    ///     If the current Option is Some, the value held by the Option is returned.
+    ///     If the current Option is None, the provided default value <paramref name="u" /> is returned.
     /// </returns>
-    public A getOrElse(A a)
+    public U getOrElse<U>(U u) where U : A
     {
-        return IsSome() ? GetA() : a;
+        return IsSome() ? (U)GetA() : u;
     }
 
     /// <summary>
-    ///     Retrieves the value held by the current Option. If the Option is None, the provided default value is returned.
-    ///     This method is asynchronous and returns a Task that represents the result.
+    ///     Filters the current Option based on a specified predicate function.
+    ///     If the predicate function returns true for the value in the Option, the Option remains unchanged.
+    ///     If the predicate function returns false or throws an exception, the Option is transformed into a None Option.
     /// </summary>
-    /// <param name="a">The default value to be returned if the current Option is None.</param>
+    /// <param name="predicate">
+    ///     A function that takes the value in the Option and returns a boolean.
+    ///     If the function returns true, the Option remains unchanged.
+    ///     If the function returns false or throws an exception, the Option is transformed into a None Option.
+    /// </param>
     /// <returns>
-    ///     A Task that will produce the value held by the current Option if it is Some, otherwise the provided default value
-    ///     <paramref name="a" />.
+    ///     If the predicate function returns true for the value in the Option, the Option remains unchanged.
+    ///     If the predicate function returns false or throws an exception, a new None Option is returned.
     /// </returns>
-    public async Task<A> getOrElseAsync(A a)
+    public Option<A> filter(Func<A, bool> predicate)
     {
-        return IsSome() ? GetA() : await Task.FromResult(a);
+        if (IsNone()) return option.none<A>();
+
+        try
+        {
+            return predicate(GetA()) ? this : option.none<A>();
+        }
+        catch (Exception)
+        {
+            return option.none<A>();
+        }
+    }
+
+    /// <summary>
+    ///     Asynchronously filters the current Option based on a specified predicate function.
+    ///     If the predicate function returns true for the value in the Option, the Option remains unchanged.
+    ///     If the predicate function returns false or throws an exception, the Option is transformed into a None Option.
+    /// </summary>
+    /// <param name="predicateAsync">
+    ///     A function that takes the value in the Option and returns a Task of boolean.
+    ///     If the function returns true, the Option remains unchanged.
+    ///     If the function returns false or throws an exception, the Option is transformed into a None Option.
+    /// </param>
+    /// <returns>
+    ///     If the predicate function returns true for the value in the Option, the Option remains unchanged.
+    ///     If the predicate function returns false or throws an exception, a new None Option is returned.
+    /// </returns>
+    public async Task<Option<A>> filterAsync(Func<A, Task<bool>> predicateAsync)
+    {
+        if (IsNone()) return option.none<A>();
+
+        try
+        {
+            return await predicateAsync(GetA()) ? this : option.none<A>();
+        }
+        catch (Exception)
+        {
+            return option.none<A>();
+        }
+    }
+
+    /// <summary>
+    ///     Transforms the current Option using the provided transformer function.
+    /// </summary>
+    /// <typeparam name="U">The type of the value in the returned Option.</typeparam>
+    /// <param name="transformer">
+    ///     A function that takes the value in the current Option and returns a new Option of type U.
+    /// </param>
+    /// <returns>
+    ///     A new Option of type U. If the current Option is Some, the transformer function is applied to its value,
+    ///     and the result is returned as a new Some Option. If the current Option is None, a new None Option is returned.
+    /// </returns>
+    public Option<U> transform<U>(
+        Func<A, Option<U>> transformer
+    )
+        where U : A
+    {
+        return flatMap(transformer);
+    }
+
+    /// <summary>
+    ///     Transforms the current Option asynchronously using the provided transformer function.
+    /// </summary>
+    /// <typeparam name="U">The type of the value in the returned Option.</typeparam>
+    /// <param name="transformerAsync">
+    ///     A function that takes the value in the current Option and returns a Task of an Option of type U.
+    ///     This function should not throw any exceptions.
+    /// </param>
+    /// <returns>
+    ///     A new Option of type U.
+    ///     If the current Option is Some, the transformer function is applied to its value asynchronously,
+    ///     and the result is returned as a new Some Option.
+    ///     If the current Option is None, a new None Option is returned.
+    ///     The result is represented as a Task.
+    /// </returns>
+    public async Task<Option<U>> transformAsync<U>(
+        Func<A, Task<Option<U>>> transformerAsync
+    )
+        where U : A
+    {
+        return await flatMapAsync(transformerAsync);
     }
 }
