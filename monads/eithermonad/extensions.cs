@@ -1,4 +1,4 @@
-﻿namespace monads.eithermonad;
+﻿namespace back.zone.monads.eithermonad;
 
 public static class eitherextensions
 {

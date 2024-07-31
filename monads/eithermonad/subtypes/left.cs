@@ -1,4 +1,4 @@
-﻿namespace monads.eithermonad.subtypes;
+﻿namespace back.zone.monads.eithermonad.subtypes;
 
 /// <summary>
 ///     Represents a Left value in the Either monad.

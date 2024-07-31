@@ -1,4 +1,4 @@
-﻿namespace monads.eithermonad;
+﻿namespace back.zone.monads.eithermonad;
 
 /// <summary>
 ///     Represents a disjoint union type, commonly known as Either.

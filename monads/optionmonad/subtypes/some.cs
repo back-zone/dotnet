@@ -1,4 +1,4 @@
-namespace monads.optionmonad.subtypes;
+namespace back.zone.monads.optionmonad.subtypes;
 
 /// <summary>
 ///     Represents a non-empty option, containing a value of type <typeparamref name="A" />.

@@ -1,4 +1,4 @@
-namespace monads.optionmonad;
+namespace back.zone.monads.optionmonad;
 
 public static class extension
 {

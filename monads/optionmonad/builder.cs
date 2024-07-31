@@ -1,7 +1,7 @@
-using monads.iomonad;
-using monads.optionmonad.subtypes;
+using back.zone.monads.iomonad;
+using back.zone.monads.optionmonad.subtypes;
 
-namespace monads.optionmonad;
+namespace back.zone.monads.optionmonad;
 
 public static class option
 {

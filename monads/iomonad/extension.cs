@@ -1,6 +1,6 @@
 using monads.iomonad;
 
-namespace monads.result;
+namespace back.zone.monads.iomonad;
 
 public static class ioextensions
 {

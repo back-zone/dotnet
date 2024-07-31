@@ -1,4 +1,6 @@
-namespace monads.iomonad.subtypes;
+using monads.iomonad;
+
+namespace back.zone.monads.iomonad.subtypes;
 
 /// <summary>
 ///     Represents a failed computation in the IO monad.

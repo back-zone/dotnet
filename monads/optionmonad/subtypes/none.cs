@@ -1,4 +1,4 @@
-namespace monads.optionmonad.subtypes;
+namespace back.zone.monads.optionmonad.subtypes;
 
 /// <summary>
 ///     Represents a subtype of Option that represents a lack of a value.

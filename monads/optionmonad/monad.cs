@@ -1,4 +1,4 @@
-namespace monads.optionmonad;
+namespace back.zone.monads.optionmonad;
 
 /// <summary>
 ///     Represents an optional value. It can either hold a value of type <typeparamref name="A" /> or be empty.

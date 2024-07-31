@@ -1,7 +1,8 @@
-using monads.eithermonad;
-using monads.optionmonad;
+using back.zone.monads.eithermonad;
+using back.zone.monads.optionmonad;
+using monads.iomonad;
 
-namespace monads.iomonad;
+namespace back.zone.monads.iomonad;
 
 public static class conversions
 {

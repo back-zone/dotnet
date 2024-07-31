@@ -1,5 +1,5 @@
-using monads.iomonad;
-using monads.iomonad.subtypes;
+using back.zone.monads.iomonad;
+using back.zone.monads.iomonad.subtypes;
 using Xunit.Abstractions;
 
 namespace monads.tests.iotests;

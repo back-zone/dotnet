@@ -1,6 +1,6 @@
-﻿using monads.eithermonad.subtypes;
+﻿using back.zone.monads.eithermonad.subtypes;
 
-namespace monads.eithermonad;
+namespace back.zone.monads.eithermonad;
 
 /// <summary>
 ///     Provides methods to create instances of the Either monad.
