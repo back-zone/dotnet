@@ -7,6 +7,9 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
+        <AssemblyName>back.zone.monads.tests</AssemblyName>
+        <RootNamespace>back.zone.monads.tests</RootNamespace>
+        <Company>back.zone</Company>
     </PropertyGroup>
 
     <ItemGroup>
