@@ -43,7 +43,6 @@ public static class conversions
         where A : notnull
     {
         var currentOption = await optionTask;
-
         return currentOption.toIO();
     }
 
@@ -86,7 +85,6 @@ public static class conversions
         where A : notnull
     {
         var currentOption = await optionTask;
-
         return currentOption.toEither();
     }
 }

@@ -28,7 +28,6 @@ public static class extension
         where B : notnull
     {
         var currentTask = await optionTask;
-
         return await currentTask.flatMapAsync(asyncFlatMapper);
     }
 
