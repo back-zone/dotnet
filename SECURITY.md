@@ -23,5 +23,3 @@ Version	Supported
 < 2.0	❌
 Reporting a Vulnerability
 Please open an issue or send an email to oss-sec@back.zone
-
-Markdown 410 bytes 54 words 14 lines Ln 6, Col 0HTML 202 characters 37 words 11 paragraphs
