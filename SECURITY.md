@@ -1,10 +1,8 @@
-Welcome file
-Welcome file
 # Security Policy
 
 ## Supported Versions
 
-Below you can find supported versions table. Please migrate to 2.0 branch immediate.
+Below you can find supported versions table. Please migrate to 2.0 branch as soon as possible.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -14,12 +12,3 @@ Below you can find supported versions table. Please migrate to 2.0 branch immedi
 ## Reporting a Vulnerability
 
 Please open an [issue](https://github.com/back-zone/dotnet/issues/new/choose) or send an email to  `oss-sec@back.zone`
-Security Policy
-Supported Versions
-Below you can find supported versions table. Please migrate to 2.0 branch immediate.
-
-Version	Supported
-2.0.x	✅
-< 2.0	❌
-Reporting a Vulnerability
-Please open an issue or send an email to oss-sec@back.zone
