@@ -111,9 +111,11 @@ public abstract class Either<L, R>
             var result = await asyncFlatMapper(GetRight());
             return result;
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            return either.left<L1, B>((L1)GetLeft());
+            return typeof(Exception) == typeof(L1)
+                ? either.left<L1, B>((L1)(object)e)
+                : either.left<L1, B>((L1)GetLeft());
         }
     }
 
