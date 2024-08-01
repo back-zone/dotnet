@@ -1,6 +1,4 @@
-using back.zone.monads.iomonad;
-
-namespace monads.iomonad;
+namespace back.zone.monads.iomonad;
 
 /// <summary>
 ///     Represents an immutable container that encapsulates a value of type A and provides functionalities for working with
