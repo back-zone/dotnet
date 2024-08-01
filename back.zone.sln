@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "monads", "monads\monads.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "monads.tests", "monads.tests\monads.tests.csproj", "{37540F2B-BF5D-43C0-9F0C-30E3B1BD8408}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "net.http", "net.http\net.http.csproj", "{832FDEB0-A91E-4622-AB42-E33F4E33D1D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{37540F2B-BF5D-43C0-9F0C-30E3B1BD8408}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37540F2B-BF5D-43C0-9F0C-30E3B1BD8408}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37540F2B-BF5D-43C0-9F0C-30E3B1BD8408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{832FDEB0-A91E-4622-AB42-E33F4E33D1D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{832FDEB0-A91E-4622-AB42-E33F4E33D1D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{832FDEB0-A91E-4622-AB42-E33F4E33D1D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{832FDEB0-A91E-4622-AB42-E33F4E33D1D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
