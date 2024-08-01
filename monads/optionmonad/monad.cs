@@ -349,6 +349,11 @@ public abstract class Option<A> where A : notnull
         return IsSome() ? some(GetA()) : none;
     }
 
+    public B fold<B>(Func<B> none, Func<A, B> some)
+    {
+        return IsSome() ? some(GetA()) : none();
+    }
+
     /// <summary>
     ///     Applies a function to the value inside the Option if it is Some, otherwise returns the provided default value.
     ///     This method is asynchronous and returns a Task that represents the result.
