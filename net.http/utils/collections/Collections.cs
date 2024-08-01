@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 
 namespace back.zone.net.http.utils.collections;
 
-public class Collections
+public static class Collections
 {
     public static ref T SelectByReference<T>(ref T t)
     {

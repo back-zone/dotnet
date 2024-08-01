@@ -4,9 +4,9 @@
         <Title>back.zone HTTP</Title>
         <AssemblyName>back.zone.net.http</AssemblyName>
         <RootNamespace>back.zone.net.http</RootNamespace>
-        <Version>2.0.0</Version>
-        <AssemblyVersion>2.0.0</AssemblyVersion>
-        <FileVersion>2.0.0</FileVersion>
+        <Version>2.0.1</Version>
+        <AssemblyVersion>2.0.1</AssemblyVersion>
+        <FileVersion>2.0.1</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
@@ -32,9 +32,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="back.zone.monads" Version="2.0.0"/>
+        <PackageReference Include="back.zone.monads" Version="2.0.1"/>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1"/>
+        <PackageReference Include="MongoDB.Bson" Version="2.28.0"/>
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1"/>
     </ItemGroup>
 
