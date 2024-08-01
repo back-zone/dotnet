@@ -17,6 +17,8 @@
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>back.zone net.http, back.zone, net.http</PackageTags>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
