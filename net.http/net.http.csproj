@@ -13,7 +13,7 @@
         <Title>back.zone HTTP</Title>
         <Description></Description>
         <Copyright>2024</Copyright>
-        <PackageIcon>logo.svg</PackageIcon>
+        <PackageIcon>logo.png</PackageIcon>
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>back.zone net.http, back.zone, net.http</PackageTags>
@@ -28,9 +28,9 @@
             <Pack>true</Pack>
             <PackagePath>/</PackagePath>
         </None>
-        <None Update="logo.svg">
-            <Pack>True</Pack>
-            <PackagePath></PackagePath>
+        <None Update="logo.png">
+          <Pack>True</Pack>
+          <PackagePath></PackagePath>
         </None>
     </ItemGroup>
 
