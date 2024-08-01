@@ -1,35 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <Title>back.zone monads</Title>
+        <AssemblyName>back.zone.monads</AssemblyName>
+        <RootNamespace>back.zone.monads</RootNamespace>
+        <Version>2.0.0</Version>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
+        <Company>back.zone</Company>
+        <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
+        <Copyright>2024</Copyright>
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>12</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <Version>2.0.0</Version>
-        <Title>back.zone monads</Title>
-        <Authors>Murat YavuzKAPLAN</Authors>
-        <Copyright>2024</Copyright>
+        <PackageId>back.zone.monads</PackageId>
+        <PackageIcon>logo.png</PackageIcon>
         <PackageProjectUrl>https://github.com/back-zone/dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>back.zone, monads, backzone, backzone monads, try, either, option</PackageTags>
-        <Company>back.zone</Company>
-        <AssemblyVersion>2.0.0</AssemblyVersion>
-        <FileVersion>2.0.0</FileVersion>
-        <RootNamespace>back.zone.monads</RootNamespace>
-        <AssemblyName>back.zone.monads</AssemblyName>
- 	<PackageLicenseFile>LICENSE</PackageLicenseFile>
-	<PackageReadmeFile>README.md</PackageReadmeFile>
-	<PackageIcon>logo.png</PackageIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
-    
+
     <ItemGroup>
-	<None Include="LICENSE" Pack="true" PackagePath="\"/>
-	<None Include="README.md" Pack="true" PackagePath="\"/>
-	<None Update="logo.png">
-	  <Pack>True</Pack>
-	  <PackagePath></PackagePath>
-	</None>
+        <None Include="LICENSE" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Update="logo.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
 </Project>

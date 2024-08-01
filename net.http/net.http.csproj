@@ -1,46 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <Title>back.zone HTTP</Title>
+        <AssemblyName>back.zone.net.http</AssemblyName>
+        <RootNamespace>back.zone.net.http</RootNamespace>
+        <Version>2.0.0</Version>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+        <FileVersion>2.0.0</FileVersion>
+        <Company>back.zone</Company>
+        <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
+        <Copyright>2024</Copyright>
         <TargetFramework>net8.0</TargetFramework>
         <LangVersion>12</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AssemblyName>back.zone.net.http</AssemblyName>
-        <RootNamespace>back.zone.net.http</RootNamespace>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>back.zone.net.http</PackageId>
-        <Version>2.0.0</Version>
-        <Title>back.zone HTTP</Title>
-        <Description></Description>
-        <Copyright>2024</Copyright>
         <PackageIcon>logo.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/back-zone/dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>back.zone net.http, back.zone, net.http</PackageTags>
-        <AssemblyVersion>2.0.0</AssemblyVersion>
-        <FileVersion>2.0.0</FileVersion>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Update="README.md">
-            <Pack>true</Pack>
-            <PackagePath>/</PackagePath>
-        </None>
-        <None Update="LICENSE">
-            <Pack>true</Pack>
-            <PackagePath>/</PackagePath>
-        </None>
-        <None Update="logo.png">
-          <Pack>True</Pack>
-          <PackagePath></PackagePath>
-        </None>
+        <None Include="LICENSE" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Update="logo.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\monads\monads.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
+        <PackageReference Include="back.zone.monads" Version="2.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0"/>
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.1"/>
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1"/>
