@@ -30,9 +30,9 @@ public sealed class MongoService
     /// <returns>An IO monad containing the requested MongoDB collection.</returns>
     public IO<IMongoCollection<A>> GetCollection<A>(string collectionName)
     {
-        return io.succeed(collectionName).zipWith(io.succeed((_client, _database)), CollectionOf<A>);
+        return io.succeed(collectionName).zipWith(io.succeed((_client, _database)), CollectionOf);
 
-        static IMongoCollection<A> CollectionOf<A>(
+        static IMongoCollection<A> CollectionOf(
             string collectionName,
             (MongoClient client, string database) connectionParameters
         )
