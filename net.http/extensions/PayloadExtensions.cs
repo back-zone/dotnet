@@ -12,8 +12,8 @@ public static class PayloadExtensions
         where A : notnull
     {
         return ioA.fold(
-            Payload<A>.FailFromException,
-            data => Payload<A>.SucceedWithData(option.some(data))
+            Payload.FailFromException<A>,
+            data => Payload.SucceedWithData(option.some(data))
         );
     }
 
