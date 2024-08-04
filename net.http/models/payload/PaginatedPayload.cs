@@ -42,12 +42,15 @@ public record PaginatedPayload<A>(
     [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<ImmutableArray<A>> Data
 )
+    where A : notnull;
+
+public static class PaginatedPayload
 {
     private const string SuccessMessage = "#success#";
     private const string FailureMessage = "#failure#";
 
 
-    public static PaginatedPayload<A> Make(
+    public static PaginatedPayload<A> Make<A>(
         bool result,
         string message,
         PaginationParameters pagination,
@@ -73,7 +76,7 @@ public record PaginatedPayload<A>(
         );
     }
 
-    public static PaginatedPayload<A> Succeed(
+    public static PaginatedPayload<A> Succeed<A>(
         PaginationParameters pagination,
         long totalRecords,
         Option<ImmutableArray<A>> data
@@ -82,7 +85,7 @@ public record PaginatedPayload<A>(
         return Make(true, SuccessMessage, pagination, totalRecords, data);
     }
 
-    public static PaginatedPayload<A> Fail(
+    public static PaginatedPayload<A> Fail<A>(
         PaginationParameters pagination,
         long totalRecords,
         Option<ImmutableArray<A>> data

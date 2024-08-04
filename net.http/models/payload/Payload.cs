@@ -20,53 +20,55 @@ public sealed record Payload<A>(
     [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<A> Data
 )
-    where A : notnull
+    where A : notnull;
+
+public static class Payload
 {
     private const string SuccessMessage = "#success#";
     private const string FailureMessage = "#failure#";
 
-    public static Payload<A> Succeed()
+    public static Payload<A> Succeed<A>()
     {
         return new Payload<A>(true, SuccessMessage, option.none<A>());
     }
 
-    public static Payload<A> SucceedWithMessage(string message)
+    public static Payload<A> SucceedWithMessage<A>(string message)
     {
         return new Payload<A>(true, message, option.none<A>());
     }
 
-    public static Payload<A> SucceedWithData(Option<A> data)
+    public static Payload<A> SucceedWithData<A>(Option<A> data)
     {
         return new Payload<A>(true, SuccessMessage, data);
     }
 
-    public static Payload<A> SucceedWithMessageAndData(string message, Option<A> data)
+    public static Payload<A> SucceedWithMessageAndData<A>(string message, Option<A> data)
     {
         return new Payload<A>(true, message, data);
     }
 
-    public static Payload<A> Fail()
+    public static Payload<A> Fail<A>()
     {
         return new Payload<A>(false, FailureMessage, option.none<A>());
     }
 
-    public static Payload<A> FailWithMessage(string message = FailureMessage)
+    public static Payload<A> FailWithMessage<A>(string message = FailureMessage)
     {
         return new Payload<A>(false, message, option.none<A>());
     }
 
-    public static Payload<A> FailWithData(Option<A> data)
+    public static Payload<A> FailWithData<A>(Option<A> data)
     {
         return new Payload<A>(false, FailureMessage, data);
     }
 
-    public static Payload<A> FailWithMessageAndData(string message, Option<A> data)
+    public static Payload<A> FailWithMessageAndData<A>(string message, Option<A> data)
     {
         return new Payload<A>(false, message, data);
     }
 
-    public static Payload<A> FailFromException(Exception exception)
+    public static Payload<A> FailFromException<A>(Exception exception)
     {
-        return FailWithMessage(exception.Message);
+        return FailWithMessage<A>(exception.Message);
     }
 }

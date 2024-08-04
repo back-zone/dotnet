@@ -4,9 +4,9 @@
         <Title>back.zone HTTP</Title>
         <AssemblyName>back.zone.net.http</AssemblyName>
         <RootNamespace>back.zone.net.http</RootNamespace>
-        <Version>2.0.41</Version>
-        <AssemblyVersion>2.0.41</AssemblyVersion>
-        <FileVersion>2.0.41</FileVersion>
+        <Version>2.0.42</Version>
+        <AssemblyVersion>2.0.42</AssemblyVersion>
+        <FileVersion>2.0.42</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
