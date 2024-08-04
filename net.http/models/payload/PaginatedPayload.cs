@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
+using back.zone.monads.conversions;
 using back.zone.monads.optionmonad;
 using back.zone.net.http.models.parameters;
 
@@ -24,10 +25,12 @@ public record PaginatedPayload<A>(
     [property: JsonPropertyName(PaginatedPayloadSchema.Message)]
     string Message,
     [property: JsonPropertyName(PaginatedPayloadSchema.PreviousPage)]
+    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<int> PreviousPage,
     [property: JsonPropertyName(PaginatedPayloadSchema.CurrentPage)]
     int CurrentPage,
     [property: JsonPropertyName(PaginatedPayloadSchema.NextPage)]
+    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<int> NextPage,
     [property: JsonPropertyName(PaginatedPayloadSchema.TotalPages)]
     long TotalPages,
@@ -36,6 +39,7 @@ public record PaginatedPayload<A>(
     [property: JsonPropertyName(PaginatedPayloadSchema.PageSize)]
     int PageSize,
     [property: JsonPropertyName(PaginatedPayloadSchema.Data)]
+    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<ImmutableArray<A>> Data
 )
 {

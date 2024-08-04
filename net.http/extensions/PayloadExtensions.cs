@@ -1,8 +1,8 @@
+using back.zone.monads.iomonad;
 using back.zone.monads.optionmonad;
 using back.zone.net.http.models.payload;
-using monads.iomonad;
 
-namespace back.zone.net.http.configuration.converters;
+namespace back.zone.net.http.extensions;
 
 public static class PayloadExtensions
 {

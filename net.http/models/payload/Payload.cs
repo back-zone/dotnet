@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using back.zone.monads.conversions;
 using back.zone.monads.optionmonad;
 
 namespace back.zone.net.http.models.payload;
@@ -16,6 +17,7 @@ public sealed record Payload<A>(
     [property: JsonPropertyName(PayloadSchema.Message)]
     string Message,
     [property: JsonPropertyName(PayloadSchema.Data)]
+    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
     Option<A> Data
 )
     where A : notnull
@@ -65,6 +67,6 @@ public sealed record Payload<A>(
 
     public static Payload<A> FailFromException(Exception exception)
     {
-        return FailWithMessage($"An error occurred: {exception.Message}");
+        return FailWithMessage(exception.Message);
     }
 }
