@@ -374,4 +374,30 @@ public static class ioextensions
         var currentTask = await ioTask;
         return await currentTask.transformAsync(transformerAsync);
     }
+
+    /// <summary>
+    ///     Asynchronously transforms the error of an IO monad using an asynchronous transformer function.
+    /// </summary>
+    /// <typeparam name="A">The type of the inner value of the input IO monad.</typeparam>
+    /// <param name="ioTask">The asynchronous task containing the input IO monad.</param>
+    /// <param name="errorTransformerAsync">
+    ///     The asynchronous transformer function that takes an Exception and returns a Task of Exception.
+    ///     This function is used to transform the error of the IO monad.
+    /// </param>
+    /// <returns>
+    ///     An asynchronous task containing the transformed IO monad.
+    ///     If the error transformer function returns a new Exception for the error, the returned IO monad will contain the
+    ///     transformed error.
+    ///     If the error transformer function does not return a new Exception, the returned IO monad will be the same as the
+    ///     input IO monad.
+    /// </returns>
+    public static async Task<IO<A>> transformErrorAsync<A>(
+        this Task<IO<A>> ioTask,
+        Func<Exception, Task<Exception>> errorTransformerAsync
+    )
+        where A : notnull
+    {
+        var currentTask = await ioTask;
+        return await currentTask.transformErrorAsync(errorTransformerAsync);
+    }
 }

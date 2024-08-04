@@ -701,4 +701,72 @@ public abstract class IO<A> where A : notnull
     {
         return await flatMapAsync(transformerAsync);
     }
+
+    /// <summary>
+    ///     Transforms the encapsulated exception of the current IO instance using the provided error transformer function.
+    ///     If the current IO instance is in a success state, the function returns the instance itself without any
+    ///     transformation.
+    ///     If the current IO instance is in a failure state, the provided error transformer function is applied to the
+    ///     encapsulated exception.
+    ///     The transformed exception is then used to create a new IO instance in a failure state.
+    /// </summary>
+    /// <param name="errorTransformer">
+    ///     A function that takes the encapsulated exception of the current IO instance and returns a new exception.
+    ///     This function is used to transform the exception in case of a failure state.
+    /// </param>
+    /// <returns>
+    ///     If the current IO instance is in a success state, the function returns the instance itself without any
+    ///     transformation.
+    ///     If the current IO instance is in a failure state, the provided error transformer function is applied to the
+    ///     encapsulated exception.
+    ///     The transformed exception is then used to create a new IO instance in a failure state.
+    /// </returns>
+    public IO<A> transformError(Func<Exception, Exception> errorTransformer)
+    {
+        if (IsSuccess()) return this;
+
+        try
+        {
+            return io.fail<A>(errorTransformer(GetException()));
+        }
+        catch (Exception e)
+        {
+            return io.fail<A>(errorTransformer(e));
+        }
+    }
+
+    /// <summary>
+    ///     Transforms the encapsulated exception of the current IO instance using the provided error transformer function.
+    ///     If the current IO instance is in a success state, the function returns the instance itself without any
+    ///     transformation.
+    ///     If the current IO instance is in a failure state, the provided error transformer function is applied to the
+    ///     encapsulated exception.
+    ///     The transformed exception is then used to create a new IO instance in a failure state.
+    /// </summary>
+    /// <param name="errorTransformerAsync">
+    ///     A function that takes the encapsulated exception of the current IO instance and returns a new Task containing an
+    ///     exception.
+    ///     This function is used to transform the exception in case of a failure state.
+    /// </param>
+    /// <returns>
+    ///     If the current IO instance is in a success state, the function returns the instance itself without any
+    ///     transformation.
+    ///     If the current IO instance is in a failure state, the provided error transformer function is applied to the
+    ///     encapsulated exception.
+    ///     The transformed exception is then used to create a new IO instance in a failure state.
+    /// </returns>
+    public async Task<IO<A>> transformErrorAsync(Func<Exception, Task<Exception>> errorTransformerAsync)
+    {
+        if (IsSuccess()) return this;
+
+        try
+        {
+            var completedTransformer = await errorTransformerAsync(GetException());
+            return io.fail<A>(completedTransformer);
+        }
+        catch (Exception e)
+        {
+            return io.fail<A>(e);
+        }
+    }
 }
