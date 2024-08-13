@@ -9,11 +9,11 @@ public static class TryExtensions
         Continuation<(TA, TB), TC> continuation)
         where TC : notnull
     {
-        if (self.IsFailure()) return self.Exception();
-
         try
         {
-            return continuation(self.Value());
+            return self.IsFailure()
+                ? self.Exception()
+                : continuation(self.Value());
         }
         catch (Exception e)
         {
@@ -27,10 +27,10 @@ public static class TryExtensions
     )
         where TC : notnull
     {
-        if (self.IsFailure()) return self.Exception();
-
         try
         {
+            if (self.IsFailure()) return self.Exception();
+
             var (a, b) = self.Value();
             return continuation(a, b);
         }
@@ -50,7 +50,7 @@ public static class TryExtensions
     {
         try
         {
-            var currentTask = await self;
+            var currentTask = await self.ConfigureAwait(false);
             return currentTask.IsFailure()
                 ? currentTask.Exception()
                 : continuation(currentTask.Value());
@@ -71,10 +71,10 @@ public static class TryExtensions
     {
         try
         {
-            var currentTask = await self;
+            var currentTask = await self.ConfigureAwait(false);
             return currentTask.IsFailure()
                 ? currentTask.Exception()
-                : await continuation(currentTask.Value());
+                : await continuation(currentTask.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -92,7 +92,7 @@ public static class TryExtensions
     {
         try
         {
-            var currentTask = await self;
+            var currentTask = await self.ConfigureAwait(false);
             if (currentTask.IsFailure()) return currentTask.Exception();
 
             var (a, b) = currentTask.Value();
@@ -114,11 +114,11 @@ public static class TryExtensions
     {
         try
         {
-            var currentTask = await self;
+            var currentTask = await self.ConfigureAwait(false);
             if (currentTask.IsFailure()) return currentTask.Exception();
 
             var (a, b) = currentTask.Value();
-            return await continuation(a, b);
+            return await continuation(a, b).ConfigureAwait(false);
         }
         catch (Exception e)
         {

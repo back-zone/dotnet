@@ -1,3 +1,4 @@
+using back.zone.monads.TryMonad.SubTypes;
 using back.zone.monads.Types;
 
 namespace back.zone.monads.TryMonad;
@@ -7,13 +8,13 @@ public static class Try
     public static Try<TA> Succeed<TA>(TA value)
         where TA : notnull
     {
-        return value;
+        return new Success<TA>(value);
     }
 
     public static Try<TA> Fail<TA>(Exception exception)
         where TA : notnull
     {
-        return exception;
+        return new Failure<TA>(exception);
     }
 
     public static Try<TA> Fail<TA>(string message)
@@ -27,8 +28,7 @@ public static class Try
     {
         try
         {
-            var result = effect();
-            return result;
+            return effect();
         }
         catch (Exception e)
         {
@@ -61,7 +61,7 @@ public static class Try
     {
         try
         {
-            return await continuation(value);
+            return await continuation(value).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -78,8 +78,7 @@ public static class Try
     {
         try
         {
-            var value = await valueTask;
-            return await continuation(value);
+            return await continuation(await valueTask.ConfigureAwait(false)).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -96,8 +95,7 @@ public static class Try
     {
         try
         {
-            var value = await valueTask;
-            return continuation(value);
+            return continuation(await valueTask.ConfigureAwait(false));
         }
         catch (Exception e)
         {
@@ -133,7 +131,7 @@ public static class Try
         {
             return self.IsFailure()
                 ? self.Exception()
-                : await continuation(self.Value());
+                : await continuation(self.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -149,11 +147,11 @@ public static class Try
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
             return result.IsFailure()
                 ? result.Exception()
-                : await continuation(result.Value());
+                : await continuation(result.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -169,7 +167,7 @@ public static class Try
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
             return result.IsFailure()
                 ? result.Exception()
@@ -205,7 +203,7 @@ public static class Try
     {
         try
         {
-            return await continuation(value);
+            return await continuation(value).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -221,8 +219,7 @@ public static class Try
     {
         try
         {
-            var result = await self;
-            return await continuation(result);
+            return await continuation(await self.ConfigureAwait(false)).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -238,8 +235,7 @@ public static class Try
     {
         try
         {
-            var result = await self;
-            return continuation(result);
+            return continuation(await self.ConfigureAwait(false));
         }
         catch (Exception e)
         {
@@ -275,7 +271,7 @@ public static class Try
         {
             return self.IsFailure()
                 ? self.Exception()
-                : await continuation(self.Value());
+                : await continuation(self.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -291,10 +287,11 @@ public static class Try
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
+
             return result.IsFailure()
                 ? result.Exception()
-                : await continuation(result.Value());
+                : await continuation(result.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -310,7 +307,8 @@ public static class Try
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
+
             return result.IsFailure()
                 ? result.Exception()
                 : continuation(result.Value());
@@ -327,8 +325,7 @@ public static class Try
     {
         try
         {
-            var result = await asyncTask;
-            return result;
+            return await asyncTask.ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -341,8 +338,7 @@ public static class Try
     {
         try
         {
-            var result = await asyncTask;
-            return result;
+            return await asyncTask.ConfigureAwait(false);
         }
         catch (Exception e)
         {

@@ -21,6 +21,15 @@ public static class ioextensions
         return await currentTask.mapAsync(asyncMapper);
     }
 
+    public static async Task<IO<B>> map<A, B>(
+        this Task<IO<A>> ioTask,
+        Func<A, B> mapper
+    )
+    {
+        var currentTask = await ioTask;
+        return currentTask.map(mapper);
+    }
+
     /// <summary>
     ///     Asynchronously maps the inner value of an IO monad to a new IO monad using an asynchronous flat mapper function.
     /// </summary>
@@ -241,9 +250,17 @@ public static class ioextensions
         return await currentTask.foldAsync(failureHandler, successHandler);
     }
 
-    // public static async Task<A> FoldAsync<A>(
-    //     this Task<IO<A>> ioTask,
-    //     Func<Exception, >)
+    public static async Task<B> foldAsync<A, B>(
+        this Task<IO<A>> ioTask,
+        Func<Exception, B> failureHandler,
+        Func<A, B> successHandler
+    )
+        where A : notnull
+        where B : notnull
+    {
+        var currentTask = await ioTask;
+        return currentTask.fold(failureHandler, successHandler);
+    }
 
     /// <summary>
     ///     Asynchronously recovers from a failure in an IO monad by applying a recovery function.

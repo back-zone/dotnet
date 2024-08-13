@@ -11,7 +11,7 @@ public static class RecoverExtensions
     {
         try
         {
-            var current = await self;
+            var current = await self.ConfigureAwait(false);
 
             return current.Recover(continuation);
         }
@@ -28,9 +28,9 @@ public static class RecoverExtensions
     {
         try
         {
-            var current = await self;
+            var current = await self.ConfigureAwait(false);
 
-            return await current.RecoverAsync(continuation);
+            return await current.RecoverAsync(continuation).ConfigureAwait(false);
         }
         catch (Exception e)
         {

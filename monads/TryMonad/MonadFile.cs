@@ -39,7 +39,7 @@ public abstract class Try<TA>
     )
         where TB : notnull
     {
-        return await Try.ProvideAsync(this, asyncContinuation);
+        return await Try.ProvideAsync(this, asyncContinuation).ConfigureAwait(false);
     }
 
     public Try<TB> Map<TB>(
@@ -55,7 +55,7 @@ public abstract class Try<TA>
     )
         where TB : notnull
     {
-        return await Try.ProvideAsync(this, asyncContinuation);
+        return await Try.ProvideAsync(this, asyncContinuation).ConfigureAwait(false);
     }
 
     public Try<TC> ZipWith<TB, TC>(Try<TB> other, Continuation<TA, TB, TC> zipper)
@@ -88,10 +88,10 @@ public abstract class Try<TA>
         {
             if (IsFailure()) return Exception();
 
-            var other = await otherAsync;
+            var other = await otherAsync.ConfigureAwait(false);
             if (other.IsFailure()) return other.Exception();
 
-            return await asyncZipper(Value(), other.Value());
+            return await asyncZipper(Value(), other.Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -110,7 +110,7 @@ public abstract class Try<TA>
     )
         where TB : notnull
     {
-        return await ZipWithAsync(otherAsync, (_, b) => Task.FromResult(b));
+        return await ZipWithAsync(otherAsync, (_, b) => Task.FromResult(b)).ConfigureAwait(false);
     }
 
     public Try<(TA, TB)> Zip<TB>(Try<TB> other)
@@ -124,7 +124,7 @@ public abstract class Try<TA>
     )
         where TB : notnull
     {
-        return await ZipWithAsync(otherAsync, (a, b) => Task.FromResult((a, b)));
+        return await ZipWithAsync(otherAsync, (a, b) => Task.FromResult((a, b))).ConfigureAwait(false);
     }
 
     public TB Fold<TB>(
@@ -152,12 +152,13 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await failureHandler(Exception())
-                : await successHandler(Value());
+                ? await failureHandler(Exception()).ConfigureAwait(false)
+                : await successHandler(Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
-            return await failureHandler(new InvalidOperationException("#unexpected_exception_in_fold_method#", e));
+            return await failureHandler(new InvalidOperationException("#unexpected_exception_in_fold_method#", e))
+                .ConfigureAwait(false);
         }
     }
 
@@ -170,7 +171,7 @@ public abstract class Try<TA>
         {
             return IsFailure()
                 ? failureHandler(Exception())
-                : await successHandler(Value());
+                : await successHandler(Value()).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -186,12 +187,13 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await failureHandler(Exception())
+                ? await failureHandler(Exception()).ConfigureAwait(false)
                 : successHandler(Value());
         }
         catch (Exception e)
         {
-            return await failureHandler(new InvalidOperationException("#unexpected_exception_in_fold_method#", e));
+            return await failureHandler(new InvalidOperationException("#unexpected_exception_in_fold_method#", e))
+                .ConfigureAwait(false);
         }
     }
 
@@ -216,7 +218,7 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await recoveryHandler(Exception())
+                ? await recoveryHandler(Exception()).ConfigureAwait(false)
                 : this;
         }
         catch (Exception e)
@@ -237,7 +239,7 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await other
+                ? await other.ConfigureAwait(false)
                 : (TU)Value();
         }
         catch (Exception e)
@@ -258,7 +260,7 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await other
+                ? await other.ConfigureAwait(false)
                 : (TU)Value();
         }
         catch (Exception e)
@@ -278,7 +280,7 @@ public abstract class Try<TA>
     )
         where TU : TA
     {
-        return await FlatMapAsync(asyncTransformation);
+        return await FlatMapAsync(asyncTransformation).ConfigureAwait(false);
     }
 
     public Try<TA> TransformError(Continuation<Exception, Exception> transformation)
@@ -295,7 +297,7 @@ public abstract class Try<TA>
         try
         {
             return IsFailure()
-                ? await asyncTransformation(Exception())
+                ? await asyncTransformation(Exception()).ConfigureAwait(false)
                 : this;
         }
         catch (Exception e)

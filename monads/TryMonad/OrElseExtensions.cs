@@ -13,7 +13,7 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
+            var current = await self.ConfigureAwait(false);
             return current.OrElse(other);
         }
         catch (Exception e)
@@ -31,8 +31,8 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
-            return await current.OrElseAsync(other);
+            var current = await self.ConfigureAwait(false);
+            return await current.OrElseAsync(other).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -49,7 +49,7 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
+            var current = await self.ConfigureAwait(false);
             return current.GetOrElse(other);
         }
         catch (Exception e)
@@ -67,8 +67,8 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
-            return await current.GetOrElseAsync(other);
+            var current = await self.ConfigureAwait(false);
+            return await current.GetOrElseAsync(other).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -83,7 +83,7 @@ public static class OrElseExtensions
         where TA : notnull
         where TU : TA
     {
-        return await Try.ProvideAsync(self, continuation);
+        return await Try.ProvideAsync(self, continuation).ConfigureAwait(false);
     }
 
     public static async Task<Try<TU>> TransformAsync<TA, TU>(
@@ -93,7 +93,7 @@ public static class OrElseExtensions
         where TA : notnull
         where TU : TA
     {
-        return await Try.ProvideAsync(self, continuation);
+        return await Try.ProvideAsync(self, continuation).ConfigureAwait(false);
     }
 
     public static async Task<Try<TA>> TransformErrorAsync<TA>(
@@ -104,7 +104,7 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
+            var current = await self.ConfigureAwait(false);
             return current.TransformError(continuation);
         }
         catch (Exception e)
@@ -121,8 +121,8 @@ public static class OrElseExtensions
     {
         try
         {
-            var current = await self;
-            return await current.TransformErrorAsync(continuation);
+            var current = await self.ConfigureAwait(false);
+            return await current.TransformErrorAsync(continuation).ConfigureAwait(false);
         }
         catch (Exception e)
         {

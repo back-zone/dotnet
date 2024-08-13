@@ -10,7 +10,7 @@ public static class FlatMapExtensions
         where TA : notnull
         where TB : notnull
     {
-        return await Try.ProvideAsync(self, continuation);
+        return await Try.ProvideAsync(self, continuation).ConfigureAwait(false);
     }
 
     public static async Task<Try<TB>> FlatMapAsync<TA, TB>(
@@ -19,6 +19,6 @@ public static class FlatMapExtensions
         where TA : notnull
         where TB : notnull
     {
-        return await Try.ProvideAsync(self, continuation);
+        return await Try.ProvideAsync(self, continuation).ConfigureAwait(false);
     }
 }

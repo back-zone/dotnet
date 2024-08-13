@@ -7,9 +7,6 @@
 
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
-        <AssemblyName>back.zone.monads.tests</AssemblyName>
-        <RootNamespace>back.zone.monads.tests</RootNamespace>
-        <Company>back.zone</Company>
     </PropertyGroup>
 
     <ItemGroup>
@@ -24,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\monads\monads.csproj"/>
+        <ProjectReference Include="..\core\core.csproj"/>
     </ItemGroup>
 
 </Project>

@@ -14,7 +14,7 @@ public static class FoldExtensions
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
             return result.Fold(failureHandler, successHandler);
         }
@@ -34,13 +34,13 @@ public static class FoldExtensions
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
-            return await result.FoldAsync(failureHandler, successHandler);
+            return await result.FoldAsync(failureHandler, successHandler).ConfigureAwait(false);
         }
         catch (Exception e)
         {
-            return await failureHandler(e);
+            return await failureHandler(e).ConfigureAwait(false);
         }
     }
 
@@ -54,9 +54,9 @@ public static class FoldExtensions
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
-            return await result.FoldAsync(failureHandler, successHandler);
+            return await result.FoldAsync(failureHandler, successHandler).ConfigureAwait(false);
         }
         catch (Exception e)
         {
@@ -74,13 +74,13 @@ public static class FoldExtensions
     {
         try
         {
-            var result = await self;
+            var result = await self.ConfigureAwait(false);
 
-            return await result.FoldAsync(failureHandler, successHandler);
+            return await result.FoldAsync(failureHandler, successHandler).ConfigureAwait(false);
         }
         catch (Exception e)
         {
-            return await failureHandler(e);
+            return await failureHandler(e).ConfigureAwait(false);
         }
     }
 }
