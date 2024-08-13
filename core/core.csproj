@@ -37,6 +37,5 @@
 
     <ItemGroup>
         <Folder Include="Monads\EitherMonad\"/>
-        <Folder Include="Monads\OptionMonad\"/>
     </ItemGroup>
 </Project>

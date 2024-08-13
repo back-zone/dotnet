@@ -1,24 +1,29 @@
-namespace back.zone.core.Monads.TryMonad;
+namespace back.zone.core.Monads.OptionMonad;
 
-public static class TryGetOrElse
+public static class OptionGetOrElse
 {
     public static TU GetOrElse<TA, TU>(
-        this Try<TA> self,
+        this Option<TA> self,
         TU other
     )
-        where TA : notnull
         where TU : TA
     {
-        return self.TryGetValue(out var value)
-            ? (TU)value
-            : other;
+        try
+        {
+            return self.TryGetValue(out var value)
+                ? (TU)value
+                : other;
+        }
+        catch (Exception)
+        {
+            return other;
+        }
     }
 
     public static async Task<TU> GetOrElseAsync<TA, TU>(
-        this Try<TA> self,
+        this Option<TA> self,
         Task<TU> otherAsync
     )
-        where TA : notnull
         where TU : TA
     {
         return self.TryGetValue(out var value)
@@ -27,22 +32,22 @@ public static class TryGetOrElse
     }
 
     public static async Task<TU> GetOrElseAsync<TA, TU>(
-        this Task<Try<TA>> self,
-        Task<TU> other
+        this Task<Option<TA>> selfAsync,
+        Task<TU> otherAsync
     )
-        where TA : notnull
         where TU : TA
     {
-        return (await self.ConfigureAwait(false)).TryGetValue(out var value)
+        var current = await selfAsync.ConfigureAwait(false);
+
+        return current.TryGetValue(out var value)
             ? (TU)value
-            : await other.ConfigureAwait(false);
+            : await otherAsync.ConfigureAwait(false);
     }
 
     public static async Task<TU> GetOrElse<TA, TU>(
-        this Task<Try<TA>> self,
+        this Task<Option<TA>> self,
         TU other
     )
-        where TA : notnull
         where TU : TA
     {
         try
