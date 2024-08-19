@@ -4,6 +4,19 @@ namespace back.zone.core.Monads.TryMonad;
 
 public static class TryUnZip
 {
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using a provided continuation function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="self">The Try containing a tuple.</param>
+    /// <param name="continuation">A function that takes the tuple as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the continuation function to the tuple and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static Try<TC> UnZip<TA, TB, TC>(
         this Try<(TA, TB)> self,
         Continuation<(TA, TB), TC> continuation
@@ -26,6 +39,19 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using an asynchronous continuation function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="self">The Try containing a tuple.</param>
+    /// <param name="continuation">An asynchronous function that takes the tuple as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the continuation function to the tuple and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZipAsync<TA, TB, TC>(
         this Try<(TA, TB)> self,
         Continuation<(TA, TB), Task<TC>> continuation
@@ -48,6 +74,19 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using an asynchronous continuation function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="selfAsync">An asynchronous Task containing a Try of a tuple.</param>
+    /// <param name="continuation">An asynchronous function that takes the tuple as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the continuation function to the tuple and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZipAsync<TA, TB, TC>(
         this Task<Try<(TA, TB)>> selfAsync,
         Continuation<(TA, TB), Task<TC>> continuation
@@ -72,6 +111,19 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using a provided continuation function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="selfAsync">An asynchronous Task containing a Try of a tuple.</param>
+    /// <param name="continuation">A function that takes the tuple as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the continuation function to the tuple and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZip<TA, TB, TC>(
         this Task<Try<(TA, TB)>> selfAsync,
         Continuation<(TA, TB), TC> continuation
@@ -96,6 +148,19 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using a provided zipper function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="self">The Try containing a tuple.</param>
+    /// <param name="zipper">A function that takes the tuple's items as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the zipper function to the tuple's items and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static Try<TC> UnZip<TA, TB, TC>(
         this Try<(TA, TB)> self,
         Zipper<TA, TB, TC> zipper
@@ -118,6 +183,22 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using an asynchronous zipper function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="self">The Try containing a tuple.</param>
+    /// <param name="zipper">
+    ///     An asynchronous function that takes the tuple's items as input and returns a Try of the result
+    ///     type.
+    /// </param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the zipper function to the tuple's items and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZipAsync<TA, TB, TC>(
         this Try<(TA, TB)> self,
         Zipper<TA, TB, Task<TC>> zipper
@@ -140,6 +221,21 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using an asynchronous zipper function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="selfAsync">An asynchronous Task containing a Try of a tuple.</param>
+    /// <param name="zipper">
+    ///     An asynchronous function that takes the tuple's items as input and returns a Try of the result type.
+    /// </param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the zipper function to the tuple's items and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZipAsync<TA, TB, TC>(
         this Task<Try<(TA, TB)>> selfAsync,
         Zipper<TA, TB, Task<TC>> zipper
@@ -164,6 +260,19 @@ public static class TryUnZip
         }
     }
 
+    /// <summary>
+    ///     Unzips a Try containing a tuple into a Try of a result type using a provided zipper function.
+    /// </summary>
+    /// <typeparam name="TA">Type of the first item in the tuple.</typeparam>
+    /// <typeparam name="TB">Type of the second item in the tuple.</typeparam>
+    /// <typeparam name="TC">Type of the result.</typeparam>
+    /// <param name="selfAsync">An asynchronous Task containing a Try of a tuple.</param>
+    /// <param name="zipper">A function that takes the tuple's items as input and returns a Try of the result type.</param>
+    /// <returns>
+    ///     If the Try contains a tuple, the function applies the zipper function to the tuple's items and returns the result.
+    ///     If the Try contains an exception, the function returns the exception.
+    ///     If the Try does not contain a tuple or an exception, the function throws an InvalidOperationException.
+    /// </returns>
     public static async Task<Try<TC>> UnZip<TA, TB, TC>(
         this Task<Try<(TA, TB)>> selfAsync,
         Zipper<TA, TB, TC> zipper
