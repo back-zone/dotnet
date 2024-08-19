@@ -2,7 +2,7 @@ using back.zone.core.Types;
 
 namespace back.zone.core.Monads.OptionMonad;
 
-public static class OptionRuntime
+internal static class OptionRuntime
 {
     public static Option<TB> RunValue<TA, TB>(
         TA value,

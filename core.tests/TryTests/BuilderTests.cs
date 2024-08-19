@@ -20,6 +20,17 @@ public class BuilderTests
     [Fact]
     public void Should_Fail_With_Valid_Exception()
     {
+        int DoubleIt(int i)
+        {
+            throw new InvalidOperationException(Env.FailureMessage);
+            return i * 2;
+        }
+
+        async Task<int> ParseIntAsync(string s)
+        {
+            return await Task.FromResult(int.Parse(s));
+        }
+
         var result = Try.Fail<int>(new Exception(Env.FailureMessage));
 
         Assert.IsType<Try<int>>(result);
