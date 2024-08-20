@@ -1,7 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using back.zone.monads.configurations;
-using back.zone.monads.extensions;
+using back.zone.core.Serde.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace back.zone.storage.mongodb.configuration;
@@ -23,7 +22,7 @@ public sealed record MongoDbConfiguration(
     public static MongoDbConfiguration FromConfig(IConfigurationSection section)
     {
         return JsonSerializer.Deserialize<MongoDbConfiguration>(
-            JsonSerializer.Serialize(section.GetAsRawJson(), MonadicSerializationConfigurations.JsonSerializerOptions)
+            JsonSerializer.Serialize(section.GetAsRawJson(), BackzoneJsonSerializationOptions.Options)
         ) ?? throw new Exception("#mongodb_configuration_failed_to_deserialize#");
     }
 }

@@ -1,4 +1,4 @@
-using back.zone.monads.iomonad;
+using back.zone.core.Monads.TryMonad;
 using back.zone.storage.mongodb.configuration;
 using MongoDB.Driver;
 
@@ -23,22 +23,22 @@ public sealed class MongoService
     }
 
     /// <summary>
-    ///     Gets a collection of type <typeparamref name="A" /> from MongoDB.
+    ///     Gets a collection of type <typeparamref name="TA" /> from MongoDB.
     /// </summary>
-    /// <typeparam name="A">The type of the collection elements.</typeparam>
+    /// <typeparam name="TA">The type of the collection elements.</typeparam>
     /// <param name="collectionName">The name of the collection.</param>
     /// <returns>An IO monad containing the requested MongoDB collection.</returns>
-    public IO<IMongoCollection<A>> GetCollection<A>(string collectionName)
+    public Try<IMongoCollection<TA>> GetCollection<TA>(string collectionName)
     {
-        return io.succeed(collectionName).zipWith(io.succeed((_client, _database)), CollectionOf);
+        return Try.Succeed(collectionName).ZipWith(Try.Succeed((_client, _database)), CollectionOf);
 
-        static IMongoCollection<A> CollectionOf(
+        static IMongoCollection<TA> CollectionOf(
             string collectionName,
             (MongoClient client, string database) connectionParameters
         )
         {
             return connectionParameters.client.GetDatabase(connectionParameters.database)
-                .GetCollection<A>(collectionName);
+                .GetCollection<TA>(collectionName);
         }
     }
 }

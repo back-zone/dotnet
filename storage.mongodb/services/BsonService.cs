@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using back.zone.monads.iomonad;
+using back.zone.core.Monads.TryMonad;
 using MongoDB.Bson;
 
 namespace back.zone.storage.mongodb.services;
@@ -14,9 +14,9 @@ public static class BsonService
     /// </summary>
     /// <param name="id">The string representation of the ObjectId to parse.</param>
     /// <returns>An IO monad containing the parsed ObjectId.</returns>
-    public static IO<ObjectId> Parse(string id)
+    public static Try<ObjectId> Parse(string id)
     {
-        return io.succeed(id).map(ObjectId.Parse);
+        return Try.Succeed(id).Map(ObjectId.Parse);
     }
 
     /// <summary>
@@ -25,15 +25,15 @@ public static class BsonService
     /// </summary>
     /// <param name="ids">The array of string representations of ObjectIds to parse.</param>
     /// <returns>An IO monad containing an immutable array of parsed ObjectIds.</returns>
-    public static IO<ImmutableArray<ObjectId>> ParseMany(ImmutableArray<string> ids)
+    public static Try<ImmutableArray<ObjectId>> ParseMany(ImmutableArray<string> ids)
     {
-        return io.succeed(ids).map(ParseIds);
+        return Try.Succeed(ids).Map(ParseIds);
 
         static ImmutableArray<ObjectId> ParseIds(ImmutableArray<string> ids)
         {
             var parsedIds = ImmutableArray.CreateBuilder<ObjectId>(ids.Length);
             foreach (var id in ids) parsedIds.Add(ObjectId.Parse(id));
-            return parsedIds.ToImmutable();
+            return parsedIds.MoveToImmutable();
         }
     }
 }
