@@ -3,7 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using back.zone.monads.iomonad;
+using back.zone.core.Monads.OptionMonad;
+using back.zone.core.Monads.TryMonad;
 using back.zone.net.http.configurations;
 using back.zone.net.http.models.jwt;
 using Microsoft.IdentityModel.Tokens;
@@ -31,9 +32,9 @@ public sealed class JwtService
     /// <param name="username">The username of the user.</param>
     /// <param name="password">The password of the user.</param>
     /// <returns>An IO monad containing the generated credentials.</returns>
-    public static IO<Credentials> GenerateCredentials(string username, string password)
+    public static Try<Credentials> GenerateCredentials(string username, string password)
     {
-        return io.succeed((username, password)).map(Build);
+        return Try.Succeed((username, password)).Map(Build);
 
         static Credentials Build((string username, string password) credentials)
         {
@@ -50,9 +51,9 @@ public sealed class JwtService
     /// </summary>
     /// <param name="sessionHolder">The session holder containing user information.</param>
     /// <returns>An IO monad containing the generated claims.</returns>
-    public static IO<ImmutableArray<Claim>> GenerateClaims(SessionHolder sessionHolder)
+    public static Try<ImmutableArray<Claim>> GenerateClaims(SessionHolder sessionHolder)
     {
-        return io.succeed(sessionHolder).map(BuildClaims);
+        return Try.Succeed(sessionHolder).Map(BuildClaims);
 
         static ImmutableArray<Claim> BuildClaims(SessionHolder sessionHolder)
         {
@@ -66,7 +67,7 @@ public sealed class JwtService
                 new Claim("session_id", sessionHolder.SessionId)
             );
 
-            return claims.ToImmutable();
+            return claims.MoveToImmutable();
         }
     }
 
@@ -75,9 +76,9 @@ public sealed class JwtService
     /// </summary>
     /// <param name="claims">The claims to be included in the generated tokens.</param>
     /// <returns>An IO monad containing the generated JWT tokens.</returns>
-    public IO<JwtTokens> GenerateJwtTokens(ImmutableArray<Claim> claims)
+    public Try<JwtTokens> GenerateJwtTokens(ImmutableArray<Claim> claims)
     {
-        return GenerateAccessToken(claims).zipWith(GenerateRefreshToken(), BuildJwtTokens);
+        return GenerateAccessToken(claims).ZipWith(GenerateRefreshToken(), BuildJwtTokens);
 
         static JwtTokens BuildJwtTokens(string accessToken, string refreshToken)
         {
@@ -90,12 +91,12 @@ public sealed class JwtService
     /// </summary>
     /// <param name="claims">The claims to be included in the access token.</param>
     /// <returns>An IO monad containing the generated access token.</returns>
-    private IO<string> GenerateAccessToken(ImmutableArray<Claim> claims)
+    private Try<string> GenerateAccessToken(ImmutableArray<Claim> claims)
     {
-        return io
-            .succeed(claims)
-            .zip(io.succeed(TimeSpan.FromMilliseconds(_configuration.AccessTokenLifetime)))
-            .zipWith(io.succeed((_configuration, _encodedSecretKey)), BuildAccessToken);
+        return Try
+            .Succeed(claims)
+            .Zip(Try.Succeed(TimeSpan.FromMilliseconds(_configuration.AccessTokenLifetime)))
+            .ZipWith(Try.Succeed((_configuration, _encodedSecretKey)), BuildAccessToken);
 
         static string BuildAccessToken(
             (ImmutableArray<Claim> claims, TimeSpan timeSpan) parameters,
@@ -110,8 +111,8 @@ public sealed class JwtService
                 claims: parameters.claims,
                 expires: DateTime.UtcNow.Add(parameters.timeSpan),
                 signingCredentials: signingCredentials,
-                audience: instanceParameters.configuration.Audience.getOrElse(string.Empty),
-                issuer: instanceParameters.configuration.Issuer.getOrElse(string.Empty),
+                audience: instanceParameters.configuration.Audience.GetOrElse(string.Empty),
+                issuer: instanceParameters.configuration.Issuer.GetOrElse(string.Empty),
                 notBefore: DateTime.UtcNow
             );
             var jwtTokenString = JwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
@@ -124,11 +125,11 @@ public sealed class JwtService
     ///     Generates a refresh token for JWT authentication.
     /// </summary>
     /// <returns>An IO monad containing the generated refresh token.</returns>
-    private IO<string> GenerateRefreshToken()
+    private Try<string> GenerateRefreshToken()
     {
-        return io
-            .succeed(TimeSpan.FromMilliseconds(_configuration.RefreshTokenLifetime))
-            .zipWith(io.succeed((_configuration, _encodedSecretKey)), BuildRefreshToken);
+        return Try
+            .Succeed(TimeSpan.FromMilliseconds(_configuration.RefreshTokenLifetime))
+            .ZipWith(Try.Succeed((_configuration, _encodedSecretKey)), BuildRefreshToken);
 
         static string BuildRefreshToken(
             TimeSpan timeSpan,
@@ -142,8 +143,8 @@ public sealed class JwtService
             var jwtSecurityToken = new JwtSecurityToken(
                 expires: DateTime.UtcNow.Add(timeSpan),
                 signingCredentials: signingCredentials,
-                audience: instanceParameters.configuration.Audience.getOrElse(string.Empty),
-                issuer: instanceParameters.configuration.Issuer.getOrElse(string.Empty),
+                audience: instanceParameters.configuration.Audience.GetOrElse(string.Empty),
+                issuer: instanceParameters.configuration.Issuer.GetOrElse(string.Empty),
                 notBefore: DateTime.UtcNow
             );
             var jwtTokenString = JwtSecurityTokenHandler.WriteToken(jwtSecurityToken);
@@ -161,9 +162,9 @@ public sealed class JwtService
     ///     An IO monad containing the validated credentials if the password is correct.
     ///     Throws an <see cref="InvalidDataException" /> with the message "#invalid_credentials" if the password is incorrect.
     /// </returns>
-    public static IO<Credentials> CheckPassword(Credentials credentials, string password)
+    public static Try<Credentials> CheckPassword(Credentials credentials, string password)
     {
-        return io.succeed((credentials, password)).map(SequenceEqual);
+        return Try.Succeed((credentials, password)).Map(SequenceEqual);
 
         static Credentials SequenceEqual((Credentials creds, string password) parameters)
         {

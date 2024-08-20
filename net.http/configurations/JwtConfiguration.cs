@@ -1,9 +1,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using back.zone.monads.configurations;
-using back.zone.monads.conversions;
-using back.zone.monads.extensions;
-using back.zone.monads.optionmonad;
+using back.zone.core.Monads.OptionMonad;
+using back.zone.core.Serde.Json;
 using Microsoft.Extensions.Configuration;
 
 namespace back.zone.net.http.configurations;
@@ -36,7 +34,7 @@ public record JwtConfiguration(
     public static JwtConfiguration FromConfig(IConfigurationSection section)
     {
         return JsonSerializer.Deserialize<JwtConfiguration>(
-            JsonSerializer.Serialize(section.GetAsRawJson(), MonadicSerializationConfigurations.JsonSerializerOptions)
+            JsonSerializer.Serialize(section.GetAsRawJson(), BackzoneJsonSerializationOptions.Options)
         ) ?? throw new Exception("#jwt_configuration_failed_to_deserialize#");
     }
 }

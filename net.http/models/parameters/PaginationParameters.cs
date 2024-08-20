@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
-using back.zone.monads.optionmonad;
-using back.zone.monads.optionmonad.subtypes;
+using back.zone.core.Monads.OptionMonad;
 
 namespace back.zone.net.http.models.parameters;
 
@@ -19,13 +18,12 @@ public sealed record PaginationParameters(
 {
     public static PaginationParameters Make(Option<int> maybePage, Option<int> maybePageSize)
     {
-        return (maybePage, maybePageSize) switch
+        return (maybePage.TryGetValue(out var page), maybePageSize.TryGetValue(out var pageSize)) switch
         {
-            (Some<int> (var page), Some<int> (var pageSize)) => Make(page, pageSize),
-            (Some<int> (var page), None<int>) => Make(page, 10),
-            (None<int>, Some<int>(var pageSize)) => Make(0, pageSize),
-            (None<int>, None<int>) => Make(0, 10),
-            _ => Make(0, 10)
+            (true, true) => Make(page, pageSize),
+            (true, false) => Make(page, 10),
+            (false, true) => Make(0, pageSize),
+            (false, false) => Make(0, 10)
         };
     }
 

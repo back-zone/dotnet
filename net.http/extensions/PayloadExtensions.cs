@@ -1,29 +1,27 @@
-using back.zone.monads.iomonad;
-using back.zone.monads.optionmonad;
+using back.zone.core.Monads.OptionMonad;
+using back.zone.core.Monads.TryMonad;
 using back.zone.net.http.models.payload;
 
 namespace back.zone.net.http.extensions;
 
 public static class PayloadExtensions
 {
-    public static Payload<A> ToPayload<A>(
-        this IO<A> ioA
+    public static Payload<TA> ToPayload<TA>(
+        this Try<TA> tryA
     )
-        where A : notnull
+        where TA : notnull
     {
-        return ioA.fold(
-            Payload.FailFromException<A>,
-            data => Payload.SucceedWithData(option.some(data))
+        return tryA.Fold(
+            Payload.FailFromException<TA>,
+            data => Payload.SucceedWithData(Option.Some(data))
         );
     }
 
-    public static async Task<Payload<A>> ToPayloadAsync<A>(
-        this Task<IO<A>> asyncIo
+    public static async Task<Payload<TA>> ToPayloadAsync<TA>(
+        this Task<Try<TA>> tryAsync
     )
-        where A : notnull
+        where TA : notnull
     {
-        var currentTask = await asyncIo;
-
-        return currentTask.ToPayload();
+        return (await tryAsync).ToPayload();
     }
 }

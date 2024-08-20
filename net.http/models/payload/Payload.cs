@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
-using back.zone.monads.conversions;
-using back.zone.monads.optionmonad;
+using back.zone.core.Monads.OptionMonad;
+using back.zone.core.Serde.Json;
 
 namespace back.zone.net.http.models.payload;
 
@@ -11,64 +11,73 @@ public static class PayloadSchema
     public const string Data = "data";
 }
 
-public sealed record Payload<A>(
+public sealed record Payload<TA>(
     [property: JsonPropertyName(PayloadSchema.Result)]
     bool Result,
     [property: JsonPropertyName(PayloadSchema.Message)]
     string Message,
     [property: JsonPropertyName(PayloadSchema.Data)]
     [property: JsonConverter(typeof(OptionJsonConverterFactory))]
-    Option<A> Data
+    Option<TA> Data
 )
-    where A : notnull;
+    where TA : notnull;
 
 public static class Payload
 {
     private const string SuccessMessage = "#success#";
     private const string FailureMessage = "#failure#";
 
-    public static Payload<A> Succeed<A>()
+    public static Payload<TA> Succeed<TA>()
+        where TA : notnull
     {
-        return new Payload<A>(true, SuccessMessage, option.none<A>());
+        return new Payload<TA>(true, SuccessMessage, Option.None<TA>());
     }
 
-    public static Payload<A> SucceedWithMessage<A>(string message)
+    public static Payload<TA> SucceedWithMessage<TA>(string message)
+        where TA : notnull
     {
-        return new Payload<A>(true, message, option.none<A>());
+        return new Payload<TA>(true, message, Option.None<TA>());
     }
 
-    public static Payload<A> SucceedWithData<A>(Option<A> data)
+    public static Payload<TA> SucceedWithData<TA>(Option<TA> data)
+        where TA : notnull
     {
-        return new Payload<A>(true, SuccessMessage, data);
+        return new Payload<TA>(true, SuccessMessage, data);
     }
 
-    public static Payload<A> SucceedWithMessageAndData<A>(string message, Option<A> data)
+    public static Payload<TA> SucceedWithMessageAndData<TA>(string message, Option<TA> data)
+        where TA : notnull
     {
-        return new Payload<A>(true, message, data);
+        return new Payload<TA>(true, message, data);
     }
 
-    public static Payload<A> Fail<A>()
+    public static Payload<TA> Fail<TA>()
+        where TA : notnull
     {
-        return new Payload<A>(false, FailureMessage, option.none<A>());
+        return new Payload<TA>(false, FailureMessage, Option.None<TA>());
     }
 
-    public static Payload<A> FailWithMessage<A>(string message = FailureMessage)
+    public static Payload<TA> FailWithMessage<TA>(string message = FailureMessage)
+        where TA : notnull
     {
-        return new Payload<A>(false, message, option.none<A>());
+        return new Payload<TA>(false, message, Option.None<TA>());
     }
 
-    public static Payload<A> FailWithData<A>(Option<A> data)
+    public static Payload<TA> FailWithData<TA>(Option<TA> data)
+        where TA : notnull
     {
-        return new Payload<A>(false, FailureMessage, data);
+        return new Payload<TA>(false, FailureMessage, data);
     }
 
-    public static Payload<A> FailWithMessageAndData<A>(string message, Option<A> data)
+    public static Payload<TA> FailWithMessageAndData<TA>(string message, Option<TA> data)
+        where TA : notnull
     {
-        return new Payload<A>(false, message, data);
+        return new Payload<TA>(false, message, data);
     }
 
-    public static Payload<A> FailFromException<A>(Exception exception)
+    public static Payload<TA> FailFromException<TA>(Exception exception)
+        where TA : notnull
     {
-        return FailWithMessage<A>(exception.Message);
+        return FailWithMessage<TA>(exception.Message);
     }
 }

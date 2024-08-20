@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Text.Json.Serialization;
-using back.zone.monads.conversions;
-using back.zone.monads.optionmonad;
+using back.zone.core.Monads.OptionMonad;
+using back.zone.core.Serde.Json;
 using back.zone.net.http.models.parameters;
 
 namespace back.zone.net.http.models.payload;
@@ -19,7 +19,7 @@ public static class PaginatedPayloadSchema
     public const string Data = "data";
 }
 
-public record PaginatedPayload<A>(
+public record PaginatedPayload<TA>(
     [property: JsonPropertyName(PaginatedPayloadSchema.Result)]
     bool Result,
     [property: JsonPropertyName(PaginatedPayloadSchema.Message)]
@@ -40,30 +40,31 @@ public record PaginatedPayload<A>(
     int PageSize,
     [property: JsonPropertyName(PaginatedPayloadSchema.Data)]
     [property: JsonConverter(typeof(OptionJsonConverterFactory))]
-    Option<ImmutableArray<A>> Data
+    Option<ImmutableArray<TA>> Data
 )
-    where A : notnull;
+    where TA : notnull;
 
 public static class PaginatedPayload
 {
     private const string SuccessMessage = "#success#";
     private const string FailureMessage = "#failure#";
 
-
-    public static PaginatedPayload<A> Make<A>(
+    public static PaginatedPayload<TA> Make<TA>(
         bool result,
         string message,
         PaginationParameters pagination,
         long totalRecords,
-        Option<ImmutableArray<A>> data)
+        Option<ImmutableArray<TA>> data
+    )
+        where TA : notnull
     {
         var pageSize = pagination.PageSize == 0 ? 10 : pagination.PageSize;
         var currentPage = pagination.Page;
         var pageFlooring = totalRecords % pageSize == 0 ? 0 : 1;
         var totalPages = totalRecords / pageSize + pageFlooring;
-        var previousPage = currentPage - 1 >= 0 ? option.some(currentPage - 1) : option.none<int>();
-        var nextPage = currentPage + 1 <= totalPages ? option.some(currentPage + 1) : option.none<int>();
-        return new PaginatedPayload<A>(
+        var previousPage = currentPage - 1 >= 0 ? Option.Some(currentPage - 1) : Option.None<int>();
+        var nextPage = currentPage + 1 <= totalPages ? Option.Some(currentPage + 1) : Option.None<int>();
+        return new PaginatedPayload<TA>(
             result,
             message,
             previousPage,
@@ -76,20 +77,22 @@ public static class PaginatedPayload
         );
     }
 
-    public static PaginatedPayload<A> Succeed<A>(
+    public static PaginatedPayload<TA> Succeed<TA>(
         PaginationParameters pagination,
         long totalRecords,
-        Option<ImmutableArray<A>> data
+        Option<ImmutableArray<TA>> data
     )
+        where TA : notnull
     {
         return Make(true, SuccessMessage, pagination, totalRecords, data);
     }
 
-    public static PaginatedPayload<A> Fail<A>(
+    public static PaginatedPayload<TA> Fail<TA>(
         PaginationParameters pagination,
         long totalRecords,
-        Option<ImmutableArray<A>> data
+        Option<ImmutableArray<TA>> data
     )
+        where TA : notnull
     {
         return Make(false, FailureMessage, pagination, totalRecords, data);
     }
