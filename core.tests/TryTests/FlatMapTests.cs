@@ -1,3 +1,4 @@
+using back.zone.core.Monads.OptionMonad;
 using back.zone.core.Monads.TryMonad;
 using core.tests.TestEnv;
 
@@ -39,6 +40,14 @@ public class FlatMapTests
     public void Should_FlatMap_Success_Value_With_Failure()
     {
         var result = Try.Succeed(Env.IntValue).FlatMap(x => Try.Fail<int>(new Exception(Env.FailureMessage)));
+
+        var resultOpt = Option.Async(() => Task.FromResult("asd"))
+            .FlatMapAsync(MaybeParse);
+
+        async Task<Option<int>> MaybeParse(string s)
+        {
+            return await Task.FromResult(int.Parse(s));
+        }
 
         Assert.IsType<Try<int>>(result);
         Assert.False(result.IsSuccess);
