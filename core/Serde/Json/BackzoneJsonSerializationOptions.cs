@@ -15,7 +15,7 @@ public class BackzoneJsonSerializationOptions
     {
         WriteIndented = false,
         PropertyNameCaseInsensitive = true,
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
         Converters = { new OptionJsonConverterFactory() }
