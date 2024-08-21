@@ -4,9 +4,9 @@
         <Title>back.zone core</Title>
         <AssemblyName>back.zone.core</AssemblyName>
         <RootNamespace>back.zone.core</RootNamespace>
-        <Version>2.0.62</Version>
-        <AssemblyVersion>2.0.62</AssemblyVersion>
-        <FileVersion>2.0.62</FileVersion>
+        <Version>2.0.63</Version>
+        <AssemblyVersion>2.0.63</AssemblyVersion>
+        <FileVersion>2.0.63</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>

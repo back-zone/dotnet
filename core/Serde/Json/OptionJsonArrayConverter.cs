@@ -68,6 +68,8 @@ public class OptionJsonArrayConverter<TA> : JsonConverter<Option<ImmutableArray<
         }
         else
         {
+            if (options.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull)
+                return;
             writer.WriteNullValue();
         }
     }

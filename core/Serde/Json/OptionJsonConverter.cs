@@ -44,8 +44,14 @@ public class OptionJsonConverter<TA> : JsonConverter<Option<TA>> where TA : notn
     public override void Write(Utf8JsonWriter writer, Option<TA> value, JsonSerializerOptions options)
     {
         if (value.TryGetValue(out var a))
+        {
             JsonSerializer.Serialize(writer, a, options);
+        }
         else
+        {
+            if (options.DefaultIgnoreCondition == JsonIgnoreCondition.WhenWritingNull)
+                return;
             writer.WriteNullValue();
+        }
     }
 }
