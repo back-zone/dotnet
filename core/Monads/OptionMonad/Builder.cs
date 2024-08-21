@@ -5,12 +5,52 @@ namespace back.zone.core.Monads.OptionMonad;
 public static class Option
 {
     /// <summary>
+    ///     Creates an instance of <see cref="Option{TA}" /> based on the provided nullable value.
+    ///     If the value is not null and has a value, it returns an instance of <see cref="Option{TA}" /> containing the value.
+    ///     If the value is null or does not have a value, it returns an instance of <see cref="Option{TA}" /> representing a
+    ///     lack of value.
+    /// </summary>
+    /// <typeparam name="TA">The type of the value. Must be a struct.</typeparam>
+    /// <param name="value">The nullable value to be wrapped in an <see cref="Option{TA}" />.</param>
+    /// <returns>
+    ///     An instance of <see cref="Option{TA}" /> containing the value if it is not null and has a value.
+    ///     Otherwise, an instance of <see cref="Option{TA}" /> representing a lack of value.
+    /// </returns>
+    public static Option<TA> Of<TA>(TA? value)
+        where TA : struct
+    {
+        return value.HasValue
+            ? new Option<TA>(value.Value)
+            : None<TA>();
+    }
+
+    /// <summary>
+    ///     Creates an instance of <see cref="Option{TA}" /> based on the provided nullable value.
+    ///     If the value is not null and has a value, it returns an instance of <see cref="Option{TA}" /> containing the value.
+    ///     If the value is null or does not have a value, it returns an instance of <see cref="Option{TA}" /> representing a
+    ///     lack of value.
+    /// </summary>
+    /// <typeparam name="TA">The type of the value. Must be a struct.</typeparam>
+    /// <param name="value">The nullable value to be wrapped in an <see cref="Option{TA}" />.</param>
+    /// <returns>
+    ///     An instance of <see cref="Option{TA}" /> containing the value if it is not null and has a value.
+    ///     Otherwise, an instance of <see cref="Option{TA}" /> representing a lack of value.
+    /// </returns>
+    public static Option<TA> Of<TA>(TA? value)
+    {
+        return value is not null
+            ? new Option<TA>(value)
+            : None<TA>();
+    }
+
+    /// <summary>
     ///     Creates an instance of <see cref="Option{TA}" /> containing the specified value.
     /// </summary>
     /// <typeparam name="TA">The type of the value.</typeparam>
     /// <param name="value">The value to be wrapped in an <see cref="Option{TA}" />.</param>
     /// <returns>An instance of <see cref="Option{TA}" /> containing the specified value.</returns>
     public static Option<TA> Some<TA>(TA value)
+        where TA : notnull
     {
         return value;
     }

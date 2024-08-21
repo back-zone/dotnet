@@ -42,8 +42,10 @@ public readonly struct Option<TA>
     /// </summary>
     /// <param name="value">The value to be wrapped in the Option.</param>
     /// <returns>An Option containing the provided value.</returns>
-    public static implicit operator Option<TA>(TA value)
+    public static implicit operator Option<TA>(TA? value)
     {
-        return new Option<TA>(value);
+        return value is not null
+            ? new Option<TA>(value)
+            : Option.None<TA>();
     }
 }
