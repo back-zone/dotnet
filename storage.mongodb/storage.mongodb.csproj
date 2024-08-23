@@ -4,9 +4,9 @@
         <Title>back.zone MongoDB</Title>
         <AssemblyName>back.zone.storage.mongodb</AssemblyName>
         <RootNamespace>back.zone.storage.mongodb</RootNamespace>
-        <Version>2.0.61</Version>
-        <AssemblyVersion>2.0.61</AssemblyVersion>
-        <FileVersion>2.0.61</FileVersion>
+        <Version>2.0.62</Version>
+        <AssemblyVersion>2.0.62</AssemblyVersion>
+        <FileVersion>2.0.62</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
@@ -33,6 +33,7 @@
 
     <ItemGroup>
         <PackageReference Include="back.zone.core" Version="2.0.61"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="MongoDB.Driver" Version="2.28.0"/>
     </ItemGroup>
 

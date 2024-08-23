@@ -1,5 +1,5 @@
 using back.zone.core.Monads.TryMonad;
-using back.zone.storage.mongodb.configuration;
+using back.zone.storage.mongodb.Configuration;
 using MongoDB.Driver;
 
 namespace back.zone.storage.mongodb.services;

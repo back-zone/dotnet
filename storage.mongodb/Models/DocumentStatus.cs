@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace back.zone.storage.mongodb.models;
+namespace back.zone.storage.mongodb.Models;
 
 public static class DocumentStatusSchema
 {
