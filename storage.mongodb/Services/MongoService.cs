@@ -2,7 +2,7 @@ using back.zone.core.Monads.TryMonad;
 using back.zone.storage.mongodb.Configuration;
 using MongoDB.Driver;
 
-namespace back.zone.storage.mongodb.services;
+namespace back.zone.storage.mongodb.Services;
 
 /// <summary>
 ///     Represents a service for interacting with MongoDB collections.

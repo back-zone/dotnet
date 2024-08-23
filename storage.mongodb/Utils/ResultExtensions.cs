@@ -1,7 +1,7 @@
 using back.zone.core.Monads.TryMonad;
 using MongoDB.Driver;
 
-namespace back.zone.storage.mongodb.utils;
+namespace back.zone.storage.mongodb.Utils;
 
 /// <summary>
 ///     This class contains extension methods for MongoDB's UpdateResult and DeleteResult.

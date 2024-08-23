@@ -1,11 +1,11 @@
 using back.zone.storage.mongodb.Configuration;
-using back.zone.storage.mongodb.services;
+using back.zone.storage.mongodb.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace back.zone.storage.mongodb.Plug;
 
-public static class MongoDbServicePlugger
+public static class MongoServicePlugger
 {
     public static void Plug(
         IConfigurationManager config,

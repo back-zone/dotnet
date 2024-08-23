@@ -2,7 +2,7 @@ using System.Collections.Immutable;
 using back.zone.core.Monads.TryMonad;
 using MongoDB.Bson;
 
-namespace back.zone.storage.mongodb.services;
+namespace back.zone.storage.mongodb.Services;
 
 /// <summary>
 ///     Provides services for parsing string representations of MongoDB ObjectIds using the IO monad.

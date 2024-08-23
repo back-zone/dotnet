@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Title>back.zone MongoDB</Title>
-        <AssemblyName>back.zone.storage.mongodb</AssemblyName>
-        <RootNamespace>back.zone.storage.mongodb</RootNamespace>
+        <Title>back.zone Redis</Title>
+        <AssemblyName>back.zone.storage.redis</AssemblyName>
+        <RootNamespace>back.zone.storage.redis</RootNamespace>
         <Version>2.0.64</Version>
         <AssemblyVersion>2.0.64</AssemblyVersion>
         <FileVersion>2.0.64</FileVersion>
@@ -15,12 +15,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageId>back.zone.storage.mongodb</PackageId>
+        <PackageId>back.zone.storage.redis</PackageId>
         <PackageIcon>logo.png</PackageIcon>
         <PackageProjectUrl>https://github.com/back-zone/dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>back.zone storage.mongodb, back.zone, mongodb</PackageTags>
+        <PackageTags>back.zone storage.redis, back.zone, redis</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
@@ -34,7 +34,8 @@
     <ItemGroup>
         <PackageReference Include="back.zone.core" Version="2.0.64"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
-        <PackageReference Include="MongoDB.Driver" Version="2.28.0"/>
+        <PackageReference Include="StackExchange.Redis" Version="2.8.0"/>
     </ItemGroup>
+
 
 </Project>
