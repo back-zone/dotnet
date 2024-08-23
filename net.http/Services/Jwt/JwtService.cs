@@ -5,11 +5,11 @@ using System.Security.Cryptography;
 using System.Text;
 using back.zone.core.Monads.OptionMonad;
 using back.zone.core.Monads.TryMonad;
-using back.zone.net.http.configurations;
-using back.zone.net.http.models.jwt;
+using back.zone.net.http.Configuration;
+using back.zone.net.http.Models.Jwt;
 using Microsoft.IdentityModel.Tokens;
 
-namespace back.zone.net.http.services.jwt;
+namespace back.zone.net.http.Services.Jwt;
 
 /// <summary>
 ///     A service for generating and validating JWT tokens.

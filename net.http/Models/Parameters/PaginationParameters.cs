@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using back.zone.core.Monads.OptionMonad;
 
-namespace back.zone.net.http.models.parameters;
+namespace back.zone.net.http.Models.Parameters;
 
 public sealed class PaginationParametersSchema
 {

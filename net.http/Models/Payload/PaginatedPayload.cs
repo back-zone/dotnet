@@ -2,9 +2,9 @@ using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using back.zone.core.Monads.OptionMonad;
 using back.zone.core.Serde.Json;
-using back.zone.net.http.models.parameters;
+using back.zone.net.http.Models.Parameters;
 
-namespace back.zone.net.http.models.payload;
+namespace back.zone.net.http.Models.Payload;
 
 public static class PaginatedPayloadSchema
 {

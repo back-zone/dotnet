@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using back.zone.core.Monads.OptionMonad;
 using back.zone.core.Serde.Json;
 
-namespace back.zone.net.http.models.payload;
+namespace back.zone.net.http.Models.Payload;
 
 public static class PayloadSchema
 {

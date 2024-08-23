@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace back.zone.net.http.models.parameters;
+namespace back.zone.net.http.Models.Parameters;
 
 public static class FilterParametersSchema
 {

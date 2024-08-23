@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace back.zone.net.http.models.jwt;
+namespace back.zone.net.http.Models.Jwt;
 
 public static class CredentialsSchema
 {

@@ -1,8 +1,8 @@
 using back.zone.core.Monads.OptionMonad;
 using back.zone.core.Monads.TryMonad;
-using back.zone.net.http.models.payload;
+using back.zone.net.http.Models.Payload;
 
-namespace back.zone.net.http.extensions;
+namespace back.zone.net.http.Extensions;
 
 public static class PayloadExtensions
 {
