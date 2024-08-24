@@ -2,11 +2,12 @@
 
     <PropertyGroup>
         <Title>back.zone core</Title>
+        <IsAotCompatible>true</IsAotCompatible>
         <AssemblyName>back.zone.core</AssemblyName>
         <RootNamespace>back.zone.core</RootNamespace>
-        <Version>2.0.64</Version>
-        <AssemblyVersion>2.0.64</AssemblyVersion>
-        <FileVersion>2.0.64</FileVersion>
+        <Version>2.0.65</Version>
+        <AssemblyVersion>2.0.65</AssemblyVersion>
+        <FileVersion>2.0.65</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
