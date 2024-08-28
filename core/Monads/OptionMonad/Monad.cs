@@ -48,4 +48,11 @@ public readonly struct Option<TA>
             ? new Option<TA>(value)
             : Option.None<TA>();
     }
+
+    public static implicit operator TA?(Option<TA> option)
+    {
+        return option.TryGetValue(out var value)
+            ? value
+            : default;
+    }
 }

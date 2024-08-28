@@ -70,9 +70,9 @@ public static class TryZip
         try
         {
             return self.TryGetValue(out var value)
-                ? (await otherAsync).TryGetValue(out var otherValue)
+                ? (await otherAsync.ConfigureAwait(false)).TryGetValue(out var otherValue)
                     ? zipper(value, otherValue)
-                    : (await otherAsync).TryGetException(out var otherException)
+                    : (await otherAsync.ConfigureAwait(false)).TryGetException(out var otherException)
                         ? otherException
                         : new InvalidOperationException("#no_value_or_exception_in_zip#")
                 : self.TryGetException(out var exception)
@@ -158,9 +158,9 @@ public static class TryZip
         try
         {
             return self.TryGetValue(out var value)
-                ? (await otherAsync).TryGetValue(out var otherValue)
+                ? (await otherAsync.ConfigureAwait(false)).TryGetValue(out var otherValue)
                     ? await zipperAsync(value, otherValue).ConfigureAwait(false)
-                    : (await otherAsync).TryGetException(out var otherException)
+                    : (await otherAsync.ConfigureAwait(false)).TryGetException(out var otherException)
                         ? otherException
                         : new InvalidOperationException("#no_value_or_exception_in_zip#")
                 : self.TryGetException(out var exception)
@@ -242,9 +242,9 @@ public static class TryZip
         try
         {
             return (await self.ConfigureAwait(false)).TryGetValue(out var value)
-                ? (await otherAsync).TryGetValue(out var otherValue)
+                ? (await otherAsync.ConfigureAwait(false)).TryGetValue(out var otherValue)
                     ? zipper(value, otherValue)
-                    : (await otherAsync).TryGetException(out var otherException)
+                    : (await otherAsync.ConfigureAwait(false)).TryGetException(out var otherException)
                         ? otherException
                         : new InvalidOperationException("#no_value_or_exception_in_zip#")
                 : (await self.ConfigureAwait(false)).TryGetException(out var exception)
@@ -330,9 +330,9 @@ public static class TryZip
         try
         {
             return (await self.ConfigureAwait(false)).TryGetValue(out var value)
-                ? (await otherAsync).TryGetValue(out var otherValue)
+                ? (await otherAsync.ConfigureAwait(false)).TryGetValue(out var otherValue)
                     ? await zipperAsync(value, otherValue).ConfigureAwait(false)
-                    : (await otherAsync).TryGetException(out var otherException)
+                    : (await otherAsync.ConfigureAwait(false)).TryGetException(out var otherException)
                         ? otherException
                         : new InvalidOperationException("#no_value_or_exception_in_zip#")
                 : (await self.ConfigureAwait(false)).TryGetException(out var exception)
@@ -346,8 +346,8 @@ public static class TryZip
     }
 
     /// <summary>
-    ///     Applies a zipper function to the values of two Try instances, where the second Try instance is returned.
-    ///     If either Try instance is in a Failure state, the result will also be in a Failure state.
+    ///     Applies a zipper function to the values of two Try instances, where the second Try instance is returned. ///     If
+    ///     either Try instance is in a Failure state, the result will also be in a Failure state.
     /// </summary>
     /// <typeparam name="TA">The type of the first Try instance.</typeparam>
     /// <typeparam name="TB">The type of the second Try instance.</typeparam>
