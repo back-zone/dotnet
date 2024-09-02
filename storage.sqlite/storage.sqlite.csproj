@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Title>back.zone Sqlite</Title>
+        <IsAotCompatible>true</IsAotCompatible>
+        <AssemblyName>back.zone.storage.sqlite</AssemblyName>
+        <RootNamespace>back.zone.storage.sqlite</RootNamespace>
+        <Version>2.0.65</Version>
+        <AssemblyVersion>2.0.65</AssemblyVersion>
+        <FileVersion>2.0.65</FileVersion>
+        <Company>back.zone</Company>
+        <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
+        <Copyright>2024</Copyright>
+        <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>back.zone.storage.sqlite</PackageId>
+        <PackageIcon>logo.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/back-zone/dotnet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>back.zone, sqlite, backzone, storage.sqlite, storage</PackageTags>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="LICENSE" Pack="true" PackagePath="\"/>
+        <None Include="README.md" Pack="true" PackagePath="\"/>
+        <None Update="logo.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="back.zone.core" Version="2.0.66"/>
+        <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
+    </ItemGroup>
+</Project>
