@@ -89,6 +89,32 @@ public static class Try
     }
 
     /// <summary>
+    ///     Creates a Try monad by executing the provided asynchronous Task.
+    /// </summary>
+    /// <typeparam name="TA">The type of the value to be wrapped in the Try monad.</typeparam>
+    /// <param name="asyncTask">
+    ///     An asynchronous Task that represents an operation to be executed and wrapped in a Try monad.
+    /// </param>
+    /// <returns>
+    ///     A Task that represents the asynchronous operation, which when completed, returns a Try monad.
+    ///     The Try monad will contain either:
+    ///     - A successful result with the value from the asyncTask, if it completes without throwing an exception.
+    ///     - A failure result with the caught exception, if the asyncTask throws an exception during execution.
+    /// </returns>
+    public static async Task<Try<TA>> Async<TA>(Task<TA> asyncTask)
+        where TA : notnull
+    {
+        try
+        {
+            return await asyncTask.ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            return e;
+        }
+    }
+
+    /// <summary>
     ///     Creates a Try monad by executing the provided asynchronous effect function.
     /// </summary>
     /// <typeparam name="TA">The type of the value to be wrapped in the Try monad.</typeparam>
