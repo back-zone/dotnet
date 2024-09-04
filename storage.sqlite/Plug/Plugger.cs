@@ -1,5 +1,4 @@
 using System.Text;
-using back.zone.core.Monads.OptionMonad;
 using back.zone.storage.sqlite.Configuration;
 using back.zone.storage.sqlite.Services;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +23,6 @@ public static class SqliteServicePlugger
         var maxPoolSize = int.TryParse(configurationManager["sqlite:max_pool_size"], out var maxPs)
             ? maxPs - 1
             : 19;
-        var password = Option.Of(configurationManager["sqlite:password"]);
 
         if (minPoolSize < 1 || maxPoolSize < minPoolSize)
             throw new InvalidDataException("Invalid pool size parameters.");
@@ -34,18 +32,10 @@ public static class SqliteServicePlugger
         connectionString.Append(dbPath);
         connectionString.Append(';');
 
-        if (password.TryGetValue(out var pwd))
-        {
-            connectionString.Append("Password=");
-            connectionString.Append(pwd);
-            connectionString.Append(';');
-        }
-
         var sqliteConfiguration = new SqliteConfiguration(
             connectionString.ToString(),
             minPoolSize,
-            maxPoolSize,
-            password
+            maxPoolSize
         );
 
         var sqliteService = new SqliteService(sqliteConfiguration);

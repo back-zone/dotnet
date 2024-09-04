@@ -5,9 +5,9 @@
         <IsAotCompatible>true</IsAotCompatible>
         <AssemblyName>back.zone.storage.sqlite</AssemblyName>
         <RootNamespace>back.zone.storage.sqlite</RootNamespace>
-        <Version>2.0.67</Version>
-        <AssemblyVersion>2.0.67</AssemblyVersion>
-        <FileVersion>2.0.67</FileVersion>
+        <Version>2.0.68</Version>
+        <AssemblyVersion>2.0.68</AssemblyVersion>
+        <FileVersion>2.0.68</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>

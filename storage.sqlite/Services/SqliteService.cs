@@ -43,7 +43,7 @@ public sealed class SqliteService
 
             lock (_poolLock)
             {
-                if (_totalConnections < _configuration.MaxPoolSize)
+                if (_totalConnections < _configuration.MaxPoolSize && _totalConnections >= _configuration.MinPoolSize)
                 {
                     connection = CreateNewConnection();
                     _totalConnections++;
