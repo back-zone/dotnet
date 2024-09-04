@@ -30,7 +30,7 @@ public sealed class SqliteService
         return connection;
     }
 
-    private async Task<SqliteConnection> GetReadConnectionAsync()
+    internal async Task<SqliteConnection> GetReadConnectionAsync()
     {
         while (true)
         {
@@ -55,7 +55,12 @@ public sealed class SqliteService
         }
     }
 
-    private async Task<SqliteConnection> GetWriteConnectionAsync()
+    public async Task<Try<SqliteConnection>> AcquireReadConnection()
+    {
+        return await Try.Async(GetReadConnectionAsync());
+    }
+
+    internal async Task<SqliteConnection> GetWriteConnectionAsync()
     {
         await _writeConnectionLock.WaitAsync();
         if (_writeConnection is null || _writeConnection.State != ConnectionState.Open)
@@ -63,7 +68,14 @@ public sealed class SqliteService
         return _writeConnection;
     }
 
-    public async Task<Try<TA>> RunReadOperation<TA>(Continuation<SqliteConnection, TA> continuation)
+    public async Task<Try<SqliteConnection>> AcquireWriteConnection()
+    {
+        return await Try.Async(GetWriteConnectionAsync());
+    }
+
+    public async Task<Try<TA>> RunReadQuery<TA>(
+        Continuation<SqliteConnection, TA> continuation
+    )
         where TA : notnull
     {
         var connection = await GetReadConnectionAsync().ConfigureAwait(false);
@@ -82,7 +94,7 @@ public sealed class SqliteService
         }
     }
 
-    public async Task<Try<TA>> RunReadOperationAsync<TA>(
+    public async Task<Try<TA>> RunReadQueryAsync<TA>(
         Continuation<SqliteConnection, Task<TA>> continuation
     )
         where TA : notnull
@@ -103,7 +115,7 @@ public sealed class SqliteService
         }
     }
 
-    public async Task<Try<TA>> RunWriteOperation<TA>(
+    public async Task<Try<TA>> RunWriteQuery<TA>(
         Continuation<SqliteConnection, TA> continuation
     )
         where TA : notnull
@@ -124,7 +136,7 @@ public sealed class SqliteService
         }
     }
 
-    public async Task<Try<TA>> RunWriteOperationAsync<TA>(
+    public async Task<Try<TA>> RunWriteQueryAsync<TA>(
         Continuation<SqliteConnection, Task<TA>> continuation
     )
         where TA : notnull

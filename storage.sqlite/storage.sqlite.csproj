@@ -5,9 +5,9 @@
         <IsAotCompatible>true</IsAotCompatible>
         <AssemblyName>back.zone.storage.sqlite</AssemblyName>
         <RootNamespace>back.zone.storage.sqlite</RootNamespace>
-        <Version>2.0.65</Version>
-        <AssemblyVersion>2.0.65</AssemblyVersion>
-        <FileVersion>2.0.65</FileVersion>
+        <Version>2.0.66</Version>
+        <AssemblyVersion>2.0.66</AssemblyVersion>
+        <FileVersion>2.0.66</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="back.zone.core" Version="2.0.66"/>
+        <PackageReference Include="back.zone.core" Version="2.0.67"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.8"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
     </ItemGroup>
