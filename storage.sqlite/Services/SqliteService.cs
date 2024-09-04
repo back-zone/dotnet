@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using System.Data;
 using back.zone.core.Monads.TryMonad;
-using back.zone.core.Types;
 using back.zone.storage.sqlite.Configuration;
 using Microsoft.Data.Sqlite;
 
@@ -21,6 +20,17 @@ public sealed class SqliteService
         _configuration = configuration;
         _readConnections = new ConcurrentQueue<SqliteConnection>();
         _totalConnections = 0;
+        PopulateConnections();
+    }
+
+    private void PopulateConnections()
+    {
+        while (_totalConnections < _configuration.MinPoolSize)
+            lock (_poolLock)
+            {
+                _readConnections.Enqueue(CreateNewConnection());
+                _totalConnections++;
+            }
     }
 
     private SqliteConnection CreateNewConnection()
@@ -30,7 +40,7 @@ public sealed class SqliteService
         return connection;
     }
 
-    internal async Task<SqliteConnection> GetReadConnectionAsync()
+    private SqliteConnection GetReadConnection()
     {
         while (true)
         {
@@ -43,24 +53,20 @@ public sealed class SqliteService
 
             lock (_poolLock)
             {
-                if (_totalConnections < _configuration.MaxPoolSize && _totalConnections >= _configuration.MinPoolSize)
-                {
-                    connection = CreateNewConnection();
-                    _totalConnections++;
-                    return connection;
-                }
+                if (_totalConnections >= _configuration.MaxPoolSize) continue;
+                connection = CreateNewConnection();
+                _totalConnections++;
+                return connection;
             }
-
-            await Task.Delay(10);
         }
     }
 
-    public async Task<Try<SqliteConnection>> AcquireReadConnection()
+    public Try<SqliteConnection> AcquireReadConnection()
     {
-        return await Try.Async(GetReadConnectionAsync());
+        return Try.Succeed(GetReadConnection());
     }
 
-    internal async Task<SqliteConnection> GetWriteConnectionAsync()
+    private async Task<SqliteConnection> GetWriteConnectionAsync()
     {
         await _writeConnectionLock.WaitAsync();
         if (_writeConnection is null || _writeConnection.State != ConnectionState.Open)
@@ -71,90 +77,6 @@ public sealed class SqliteService
     public async Task<Try<SqliteConnection>> AcquireWriteConnection()
     {
         return await Try.Async(GetWriteConnectionAsync());
-    }
-
-    public async Task<Try<TA>> RunReadQuery<TA>(
-        Continuation<SqliteConnection, TA> continuation
-    )
-        where TA : notnull
-    {
-        var connection = await GetReadConnectionAsync().ConfigureAwait(false);
-
-        try
-        {
-            return continuation(connection);
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
-        finally
-        {
-            ReleaseReadConnection(connection);
-        }
-    }
-
-    public async Task<Try<TA>> RunReadQueryAsync<TA>(
-        Continuation<SqliteConnection, Task<TA>> continuation
-    )
-        where TA : notnull
-    {
-        var connection = await GetReadConnectionAsync().ConfigureAwait(false);
-
-        try
-        {
-            return await continuation(connection).ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
-        finally
-        {
-            ReleaseReadConnection(connection);
-        }
-    }
-
-    public async Task<Try<TA>> RunWriteQuery<TA>(
-        Continuation<SqliteConnection, TA> continuation
-    )
-        where TA : notnull
-    {
-        var connection = await GetWriteConnectionAsync().ConfigureAwait(false);
-
-        try
-        {
-            return continuation(connection);
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
-        finally
-        {
-            ReleaseWriteConnection();
-        }
-    }
-
-    public async Task<Try<TA>> RunWriteQueryAsync<TA>(
-        Continuation<SqliteConnection, Task<TA>> continuation
-    )
-        where TA : notnull
-    {
-        var connection = await GetWriteConnectionAsync();
-
-        try
-        {
-            return await continuation(connection).ConfigureAwait(false);
-        }
-        catch (Exception e)
-        {
-            return e;
-        }
-        finally
-        {
-            ReleaseWriteConnection();
-        }
     }
 
     public void ReleaseReadConnection(SqliteConnection connection)
