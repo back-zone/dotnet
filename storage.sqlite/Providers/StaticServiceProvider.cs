@@ -7,7 +7,7 @@ public static class SqliteServiceProvider
 {
     private static SqliteService? ServiceInstance { get; set; }
 
-    private static void Set(IServiceProvider services)
+    public static void Set(IServiceProvider services)
     {
         ServiceInstance = services.GetRequiredService<SqliteService>();
     }
