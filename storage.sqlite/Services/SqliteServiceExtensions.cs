@@ -33,7 +33,7 @@ public static class SqliteServiceExtensions
     }
 
     public static async Task<Try<(SqliteConnection, TA)>> RunQueryAsync<TA, TP>(
-        this Try<(TP parameters, SqliteConnection connection)> tuple,
+        this Task<Try<(TP parameters, SqliteConnection connection)>> asyncTuple,
         Zipper<TP, SqliteConnection, Task<TA>> continuation
     )
         where TA : notnull
@@ -41,6 +41,8 @@ public static class SqliteServiceExtensions
     {
         try
         {
+            var tuple = await asyncTuple.ConfigureAwait(false);
+
             return tuple.TryGetValue(out var flattenedTuple)
                 ? (flattenedTuple.connection,
                     await continuation(
