@@ -6,8 +6,19 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace back.zone.storage.sqlite.Plug;
 
+/// <summary>
+///     This class provides a method to plug in the SQLite service into the application's service collection.
+/// </summary>
 public static class SqliteServicePlugger
 {
+    /// <summary>
+    ///     Plugs in the SQLite service into the application's service collection.
+    /// </summary>
+    /// <param name="configurationManager">
+    ///     An instance of <see cref="IConfigurationManager" /> to retrieve configuration
+    ///     settings.
+    /// </param>
+    /// <param name="serviceCollection">An instance of <see cref="IServiceCollection" /> to register the SQLite service.</param>
     public static void Plug(
         IConfigurationManager configurationManager,
         IServiceCollection serviceCollection

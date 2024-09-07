@@ -7,6 +7,13 @@ namespace back.zone.storage.sqlite.Services;
 
 public static class SqliteServiceExtensions
 {
+    /// <summary>
+    ///     Executes a synchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="connection">The Try monad containing the SQLite connection.</param>
+    /// <param name="continuation">The continuation function to execute on the connection.</param>
+    /// <returns>A Try monad containing the result of the query or an exception if an error occurs.</returns>
     public static Try<TA> RunQuery<TA>(
         this Try<SqliteConnection> connection,
         Continuation<SqliteConnection, TA> continuation)
@@ -30,6 +37,16 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="connection">The Try monad containing the SQLite connection.</param>
+    /// <param name="continuation">The continuation function to execute on the connection.</param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA>(
         this Try<SqliteConnection> connection,
         Continuation<SqliteConnection, Task<TA>> continuation
@@ -54,6 +71,22 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="connectionAsync">
+    ///     A task that represents the Try monad containing the SQLite connection.
+    ///     This method will await the task before proceeding.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should return a task representing the result of the query.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA>(
         this Task<Try<SqliteConnection>> connectionAsync,
         Continuation<SqliteConnection, Task<TA>> continuation
@@ -80,6 +113,22 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="connectionAsync">
+    ///     A task that represents the Try monad containing the SQLite connection.
+    ///     This method will await the task before proceeding.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should return a value representing the result of the query.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA>(
         this Task<Try<SqliteConnection>> connectionAsync,
         Continuation<SqliteConnection, TA> continuation
@@ -106,6 +155,23 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes a synchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <typeparam name="TP">The type of the parameters.</typeparam>
+    /// <param name="tuple">
+    ///     A Try monad containing a tuple of parameters and an SQLite connection.
+    ///     The function will attempt to extract these values and use them in the continuation function.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should accept the parameters and connection as input and return a value of type TA.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is not released after the query execution.
+    /// </returns>
     public static Try<TA> RunQuery<TA, TP>(
         this Try<(TP parameters, SqliteConnection connection)> tuple,
         Zipper<TP, SqliteConnection, TA> continuation
@@ -130,6 +196,24 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <typeparam name="TP">The type of the parameters.</typeparam>
+    /// <param name="tuple">
+    ///     A Try monad containing a tuple of parameters and an SQLite connection.
+    ///     The function will attempt to extract these values and use them in the continuation function.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should accept the parameters and connection as input and return a task representing the result of
+    ///     type TA.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is not released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA, TP>(
         this Try<(TP parameters, SqliteConnection connection)> tuple,
         Zipper<TP, SqliteConnection, Task<TA>> continuation
@@ -154,6 +238,24 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <typeparam name="TP">The type of the parameters.</typeparam>
+    /// <param name="asyncTuple">
+    ///     A task that represents a Try monad containing a tuple of parameters and an SQLite connection.
+    ///     The function will attempt to extract these values and use them in the continuation function.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should accept the parameters and connection as input and return a task representing the result of
+    ///     type TA.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is not released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA, TP>(
         this Task<Try<(TP parameters, SqliteConnection connection)>> asyncTuple,
         Zipper<TP, SqliteConnection, Task<TA>> continuation
@@ -180,6 +282,23 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Executes an asynchronous query on the provided SQLite connection using the given continuation function.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <typeparam name="TP">The type of the parameters.</typeparam>
+    /// <param name="asyncTuple">
+    ///     A task that represents a Try monad containing a tuple of parameters and an SQLite connection.
+    ///     The function will attempt to extract these values and use them in the continuation function.
+    /// </param>
+    /// <param name="continuation">
+    ///     The continuation function to execute on the connection.
+    ///     This function should accept the parameters and connection as input and return a value of type TA.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of the query or an exception if an error occurs.
+    ///     The connection is not released after the query execution.
+    /// </returns>
     public static async Task<Try<TA>> RunQueryAsync<TA, TP>(
         this Task<Try<(TP parameters, SqliteConnection connection)>> asyncTuple,
         Zipper<TP, SqliteConnection, TA> continuation
@@ -206,6 +325,18 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Releases a read connection from the SQLite service provider and returns the result.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="tuple">
+    ///     A Try monad containing a tuple of an SQLite connection and a value of type TA.
+    ///     The function will attempt to extract these values and release the connection.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of type TA or an exception if an error occurs during the release process.
+    ///     The connection is released after the result is returned.
+    /// </returns>
     public static Try<TA> ReleaseReadConnection<TA>(
         this Try<(SqliteConnection connection, TA value)> tuple
     )
@@ -230,6 +361,18 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Asynchronously releases a read connection from the SQLite service provider and returns the result.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="asyncTuple">
+    ///     A task that represents a Try monad containing a tuple of an SQLite connection and a value of type TA.
+    ///     The function will attempt to extract these values and release the connection.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of type TA or an exception if an error occurs during the release process.
+    ///     The connection is released after the result is returned.
+    /// </returns>
     public static async Task<Try<TA>> ReleaseReadConnectionAsync<TA>(
         this Task<Try<(SqliteConnection connection, TA value)>> asyncTuple
     )
@@ -255,6 +398,18 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Releases a write connection from the SQLite service provider and returns the result.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="tuple">
+    ///     A Try monad containing a tuple of an SQLite connection and a value of type TA.
+    ///     The function will attempt to extract these values and release the connection.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of type TA or an exception if an error occurs during the release process.
+    ///     The connection is released after the result is returned.
+    /// </returns>
     public static Try<TA> ReleaseWriteConnection<TA>(
         this Try<(SqliteConnection connection, TA value)> tuple
     )
@@ -278,6 +433,18 @@ public static class SqliteServiceExtensions
         }
     }
 
+    /// <summary>
+    ///     Asynchronously releases a write connection from the SQLite service provider and returns the result.
+    /// </summary>
+    /// <typeparam name="TA">The type of the result.</typeparam>
+    /// <param name="asyncTuple">
+    ///     A task that represents a Try monad containing a tuple of an SQLite connection and a value of type TA.
+    ///     The function will attempt to extract these values and release the connection.
+    /// </param>
+    /// <returns>
+    ///     A Try monad containing the result of type TA or an exception if an error occurs during the release process.
+    ///     The connection is released after the result is returned.
+    /// </returns>
     public static async Task<Try<TA>> ReleaseWriteConnectionAsync<TA>(
         this Task<Try<(SqliteConnection connection, TA value)>> asyncTuple
     )
