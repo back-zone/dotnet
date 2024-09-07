@@ -67,6 +67,8 @@ public sealed class JwtService
                 new Claim("session_id", sessionHolder.SessionId)
             );
 
+            claims.Capacity = claims.Count;
+
             return claims.MoveToImmutable();
         }
     }

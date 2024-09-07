@@ -1,46 +1,19 @@
 using System.Collections.Immutable;
-using System.Text.Json.Serialization;
 using back.zone.core.Monads.OptionMonad;
-using back.zone.core.Serde.Json;
 using back.zone.net.http.Models.Parameters;
 
 namespace back.zone.net.http.Models.Payload;
 
-public static class PaginatedPayloadSchema
-{
-    public const string Result = "result";
-    public const string Message = "message";
-    public const string PreviousPage = "previous_page";
-    public const string CurrentPage = "current_page";
-    public const string NextPage = "next_page";
-    public const string TotalPages = "total_pages";
-    public const string TotalRecords = "total_records";
-    public const string PageSize = "page_size";
-    public const string Data = "data";
-}
-
 public record PaginatedPayload<TA>(
-    [property: JsonPropertyName(PaginatedPayloadSchema.Result)]
     bool Result,
-    [property: JsonPropertyName(PaginatedPayloadSchema.Message)]
     string Message,
-    [property: JsonPropertyName(PaginatedPayloadSchema.PreviousPage)]
-    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
-    Option<int> PreviousPage,
-    [property: JsonPropertyName(PaginatedPayloadSchema.CurrentPage)]
+    int? PreviousPage,
     int CurrentPage,
-    [property: JsonPropertyName(PaginatedPayloadSchema.NextPage)]
-    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
-    Option<int> NextPage,
-    [property: JsonPropertyName(PaginatedPayloadSchema.TotalPages)]
+    int? NextPage,
     long TotalPages,
-    [property: JsonPropertyName(PaginatedPayloadSchema.TotalRecords)]
     long TotalRecords,
-    [property: JsonPropertyName(PaginatedPayloadSchema.PageSize)]
     int PageSize,
-    [property: JsonPropertyName(PaginatedPayloadSchema.Data)]
-    [property: JsonConverter(typeof(OptionJsonConverterFactory))]
-    Option<ImmutableArray<TA>> Data
+    ImmutableArray<TA>? Data
 )
     where TA : notnull;
 
@@ -49,6 +22,16 @@ public static class PaginatedPayload
     private const string SuccessMessage = "#success#";
     private const string FailureMessage = "#failure#";
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="PaginatedPayload{TA}" /> with the provided parameters.
+    /// </summary>
+    /// <typeparam name="TA">The type of data contained in the payload.</typeparam>
+    /// <param name="result">Indicates the success or failure of the operation.</param>
+    /// <param name="message">A message describing the outcome of the operation.</param>
+    /// <param name="pagination">The pagination parameters used to calculate the page information.</param>
+    /// <param name="totalRecords">The total number of records available.</param>
+    /// <param name="data">The data to be included in the payload.</param>
+    /// <returns>A new instance of <see cref="PaginatedPayload{TA}" /> with the provided parameters.</returns>
     public static PaginatedPayload<TA> Make<TA>(
         bool result,
         string message,
@@ -77,6 +60,17 @@ public static class PaginatedPayload
         );
     }
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="PaginatedPayload{TA}" /> with success status and the provided parameters.
+    /// </summary>
+    /// <typeparam name="TA">The type of data contained in the payload.</typeparam>
+    /// <param name="pagination">The pagination parameters used to calculate the page information.</param>
+    /// <param name="totalRecords">The total number of records available.</param>
+    /// <param name="data">The data to be included in the payload.</param>
+    /// <returns>
+    ///     A new instance of <see cref="PaginatedPayload{TA}" /> with success status, the provided parameters, and
+    ///     calculated page information.
+    /// </returns>
     public static PaginatedPayload<TA> Succeed<TA>(
         PaginationParameters pagination,
         long totalRecords,
@@ -87,6 +81,17 @@ public static class PaginatedPayload
         return Make(true, SuccessMessage, pagination, totalRecords, data);
     }
 
+    /// <summary>
+    ///     Creates a new instance of <see cref="PaginatedPayload{TA}" /> with failure status and the provided parameters.
+    /// </summary>
+    /// <typeparam name="TA">The type of data contained in the payload.</typeparam>
+    /// <param name="pagination">The pagination parameters used to calculate the page information.</param>
+    /// <param name="totalRecords">The total number of records available.</param>
+    /// <param name="data">The data to be included in the payload.</param>
+    /// <returns>
+    ///     A new instance of <see cref="PaginatedPayload{TA}" /> with failure status, the provided parameters, and
+    ///     calculated page information.
+    /// </returns>
     public static PaginatedPayload<TA> Fail<TA>(
         PaginationParameters pagination,
         long totalRecords,

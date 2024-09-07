@@ -5,9 +5,9 @@
         <IsAotCompatible>true</IsAotCompatible>
         <AssemblyName>back.zone.net.http</AssemblyName>
         <RootNamespace>back.zone.net.http</RootNamespace>
-        <Version>2.0.65</Version>
-        <AssemblyVersion>2.0.65</AssemblyVersion>
-        <FileVersion>2.0.65</FileVersion>
+        <Version>2.0.66</Version>
+        <AssemblyVersion>2.0.66</AssemblyVersion>
+        <FileVersion>2.0.66</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
@@ -21,7 +21,7 @@
         <PackageProjectUrl>https://github.com/back-zone/dotnet</PackageProjectUrl>
         <RepositoryUrl>https://github.com/back-zone/dotnet</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageTags>back.zone net.http, back.zone, net.http</PackageTags>
+        <PackageTags>back.zone net.http, back.zone, net.http, http</PackageTags>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
@@ -33,11 +33,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="back.zone.core" Version="2.0.64"/>
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0"/>
+        <PackageReference Include="back.zone.core" Version="2.0.67"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.2"/>
-        <PackageReference Include="MongoDB.Bson" Version="2.28.0"/>
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.2"/>
     </ItemGroup>
 

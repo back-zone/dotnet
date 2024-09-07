@@ -1,18 +1,9 @@
-using System.Text.Json.Serialization;
 using back.zone.core.Monads.OptionMonad;
 
 namespace back.zone.net.http.Models.Parameters;
 
-public sealed class PaginationParametersSchema
-{
-    public const string Page = "page";
-    public const string PageSize = "page_size";
-}
-
 public sealed record PaginationParameters(
-    [property: JsonPropertyName(PaginationParametersSchema.Page)]
     int Page,
-    [property: JsonPropertyName(PaginationParametersSchema.PageSize)]
     int PageSize
 )
 {
