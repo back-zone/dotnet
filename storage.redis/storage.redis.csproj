@@ -4,9 +4,9 @@
         <Title>back.zone Redis</Title>
         <AssemblyName>back.zone.storage.redis</AssemblyName>
         <RootNamespace>back.zone.storage.redis</RootNamespace>
-        <Version>2.0.65</Version>
-        <AssemblyVersion>2.0.65</AssemblyVersion>
-        <FileVersion>2.0.65</FileVersion>
+        <Version>2.0.66</Version>
+        <AssemblyVersion>2.0.66</AssemblyVersion>
+        <FileVersion>2.0.66</FileVersion>
         <Company>back.zone</Company>
         <Authors>Murat YavuzKAPLAN, Ceylan ÖZGÜL</Authors>
         <Copyright>2024</Copyright>
@@ -32,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="back.zone.core" Version="2.0.64"/>
+        <PackageReference Include="back.zone.core" Version="2.0.67"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1"/>
         <PackageReference Include="StackExchange.Redis" Version="2.8.0"/>
     </ItemGroup>

@@ -6,6 +6,7 @@ namespace back.zone.storage.redis.Configuration;
 public sealed record RedisConfiguration(
     string[] EndPoints,
     Option<string> CommandName,
+    Option<string> ServiceName,
     Option<int> ConnectRetry,
     Option<bool> AllowAdmin,
     Option<string> User,
@@ -30,6 +31,7 @@ public sealed record RedisConfiguration(
         {
             EndPoints = endPoints,
             CommandMap = commandName,
+            ServiceName = ServiceName.GetOrElse(string.Empty),
             ConnectRetry = ConnectRetry.GetOrElse(3),
             AllowAdmin = AllowAdmin.GetOrElse(false),
             User = User.GetOrElse(string.Empty),

@@ -22,13 +22,14 @@ public static class RedisServicePlugger
                         ?? throw new InvalidOperationException("Redis end points not found.");
 
         var commandName = config["redis:command_name"] ?? Option.None<string>();
+        var serviceName = config["redis:service_name"] ?? Option.None<string>();
 
         var connectRetry = int.TryParse(config["redis:connect_retry"], out var retry)
-            ? retry
+            ? Option.Some(retry)
             : Option.None<int>();
 
         var allowAdmin = bool.TryParse(config["redis:allow_admin"], out var admin)
-            ? admin
+            ? Option.Some(admin)
             : Option.None<bool>();
 
         var user = config["redis:username"] ?? Option.None<string>();
@@ -36,12 +37,13 @@ public static class RedisServicePlugger
         var password = config["redis:password"] ?? Option.None<string>();
 
         var abortOnConnectFail = bool.TryParse(config["redis:abort_on_connect_fail"], out var fail)
-            ? fail
+            ? Option.Some(fail)
             : Option.None<bool>();
 
         var redisConfiguration = new RedisConfiguration(
             endPoints,
             commandName,
+            serviceName,
             connectRetry,
             allowAdmin,
             user,
